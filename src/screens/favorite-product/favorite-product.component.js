@@ -1,12 +1,13 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const FavoriteProduct = () => {
-    return (
-        <View>
-            <Text>FavoriteProduct</Text>
-        </View>
-    )
+const Favorite = () => {
+  return (
+    <View>
+      <Text>favorite-product.component</Text>
+    </View>
+  )
 }
 
-export default FavoriteProduct
+
+export default Favorite

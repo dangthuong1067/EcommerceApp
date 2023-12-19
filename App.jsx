@@ -19,7 +19,8 @@ const BottomTab = createBottomTabNavigator()
 function AppDrawerStack() {
   return (
     <DrawerStack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, swipeEnabled: false }}
+
       drawerContent={props => <DrawerView {...props} />}>
       <DrawerStack.Screen name='AppBottomStack' component={AppBottomStack} />
     </DrawerStack.Navigator>
