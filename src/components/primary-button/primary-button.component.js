@@ -4,11 +4,13 @@ import styles from "./primary-button.styles";
 const PrimaryButton = ({
   children,
   style,
+  onPress,
   ...props
 }) => (
   <Pressable
     style={(pressed) =>
       [styles.button, { opacity: pressed ? 0.8 : 1 }, style]}
+    onPress={onPress}
     {...props}
   >
 

@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useRef, useState } from 'react'
 import styles from './textinput-field.styles'
 import Icon from 'react-native-vector-icons/Ionicons'
-const TextInputField = ({ placeholder, label, iconLeft, iconRight, onPress, isShowPassword }) => {
+const TextInputField = ({ placeholder, label, iconLeft, iconRight, onPress, isShowPassword, onBlur, onChangeText, value }) => {
   return (
     <>
       <Text style={styles.label}>{label}</Text>
@@ -21,6 +21,9 @@ const TextInputField = ({ placeholder, label, iconLeft, iconRight, onPress, isSh
               placeholder={placeholder}
               secureTextEntry={isShowPassword ? false : true}
               style={styles.placeholder}
+              onBlur={onBlur}
+              onChangeText={onChangeText}
+              value={value}
             />
           }
         </View>

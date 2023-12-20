@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
   },
   textHome: {
     textAlign: 'center',
@@ -23,11 +23,13 @@ const styles = StyleSheet.create({
     marginLeft: 15
   },
   carousel: {
-    paddingTop: 10
+    paddingTop: 10,
+    paddingHorizontal: 15
+    // marginHorizontal: 15
   },
-  containerItem: {
-    marginRight: 15
-  },
+  containerItem: (lastIndex, index) => ({
+    marginRight: lastIndex === index ? 15 : 0
+  }),
   text: {
     fontWeight: 'bold',
     fontSize: 20,
@@ -41,17 +43,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 10
+    marginVertical: 10,
+    paddingHorizontal: 15
   },
-  itemCategory: {
+  itemCategory: (lastIndex, index) => ({
     width: 120,
     alignItems: 'center',
     borderRadius: 10,
     paddingBottom: 10,
-    marginRight: 15,
+    marginLeft: 15,
     borderWidth: 1,
     borderColor: '#d5d6db',
-  },
+    marginRight: lastIndex === index ? 15 : 0
+  }),
   imageCategory: {
     height: 100,
     resizeMode: 'contain',
@@ -63,12 +67,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold'
   },
-  productWithCategory: {
-    padding: 10, alignSelf: 'flex-start', borderRadius: 10,
+  productWithCategory: (lastIndex, index) => ({
+    padding: 10, alignSelf: 'flex-start',
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d5d6db',
-    marginRight: 15
-  },
+    //marginRight: 15
+    marginLeft: 10,
+    marginRight: lastIndex === index ? 10 : 0
+  }),
   itemWithCategory: {
     marginTop: 10, marginBottom: 20
   }

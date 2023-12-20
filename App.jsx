@@ -11,6 +11,11 @@ import FavoriteProduct from './src/screens/favorite-product/favorite-product.com
 import Profile from './src/screens/profile/profile.component';
 import Category from './src/screens/category/category.component';
 import Chat from './src/screens/chat/chat.component';
+import Login from './src/screens/login/login.component';
+import Register from './src/screens/register/register.component';
+import ForgotPassword from './src/screens/forgot-password/forgot-password.component';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
 const Stack = createStackNavigator()
 const DrawerStack = createDrawerNavigator()
@@ -76,14 +81,53 @@ function AppBottomStack() {
   )
 }
 
+const AuthStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name='Register' component={Register} />
+    <Stack.Screen name='Login' component={Login} />
+    <Stack.Screen name='ForgotPassword' component={ForgotPassword} />
+  </Stack.Navigator>
+)
+
+const ProtectedStack = () => (
+  <Stack.Navigator
+    screenOptions={{ headerShown: false }}
+  >
+    <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
+  </Stack.Navigator>
+)
+
+const Navigation = () => {
+  return (
+    // <NavigationContainer>
+    //   <Stack.Navigator
+    //     screenOptions={{ headerShown: false }}
+    //   >
+    //     <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+
+
+    <NavigationContainer>
+      {/* <ProtectedStack /> */}
+
+      <AuthStack />
+    </NavigationContainer>
+  )
+}
+
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <Stack.Navigator
+    //     screenOptions={{ headerShown: false }}
+    //   >
+    //     <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
+
   )
 }

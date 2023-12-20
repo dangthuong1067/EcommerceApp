@@ -59,7 +59,7 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View>
+        <View >
           <FlatList
             data={productData}
             renderItem={({ item }) =>
@@ -84,18 +84,26 @@ const Home = ({ navigation }) => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
+        // style={{ marginHorizontal: 15 }}
         >
-          {productCategory.filter(item => item.id !== 1).map((item) => (
-            <TouchableOpacity
-              style={styles.itemCategory}
-              key={item.id}
-            >
-              <Image
-                source={item.image} style={styles.imageCategory}
-              />
-              <Text style={styles.categoryName}>{item.categoryName}</Text>
-            </TouchableOpacity>
-          ))}
+          {productCategory.filter(item => item.id !== 1).map((item, index) => {
+            const newProductCategory = productCategory.filter(item => item.id !== 1)
+            const lastIndex = newProductCategory.length - 1
+            console.log('lastIndex', lastIndex);
+            console.log('index', index);
+            console.log('item', item);
+            return (
+              <TouchableOpacity
+                style={styles.itemCategory(lastIndex, index)}
+                key={item.id}
+              >
+                <Image
+                  source={item.image} style={styles.imageCategory}
+                />
+                <Text style={styles.categoryName}>{item.categoryName}</Text>
+              </TouchableOpacity>
+            )
+          })}
         </ScrollView>
 
         <View style={styles.preferentialProducts}>
@@ -109,26 +117,33 @@ const Home = ({ navigation }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
         >
-          {newProductCategory.map((item) => (
-            <TouchableOpacity
-              onPress={() => filterWithCategory(item.id)}
-              style={[styles.productWithCategory, { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
-              key={item.id}
-            >
-              <Text style={{ color: item.isSelectCategory ? 'white' : 'black', fontWeight: 500 }}>{item.categoryName}</Text>
-            </TouchableOpacity>
-          ))}
+          {newProductCategory.map((item, index) => {
+            const lastIndex = newProductCategory.length - 1
+            return (
+              <TouchableOpacity
+                onPress={() => filterWithCategory(item.id)}
+                style={[styles.productWithCategory(lastIndex, index), { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
+                key={item.id}
+              >
+                <Text style={{ color: item.isSelectCategory ? 'white' : 'black', fontWeight: 500 }}>{item.categoryName}</Text>
+              </TouchableOpacity>
+            )
+          })}
         </ScrollView>
 
         <View style={styles.itemWithCategory}>
           <FlatList
             data={productDataFiltered}
-            renderItem={({ item }) =>
-              <View style={styles.containerItem}>
-                <Item
-                  item={item}
-                />
-              </View>
+            renderItem={({ item, index }) => {
+              const lastIndex = productDataFiltered.length - 1
+              return (
+                <View style={styles.containerItem(lastIndex, index)}>
+                  <Item
+                    item={item}
+                  />
+                </View>
+              )
+            }
             }
             horizontal
             showsHorizontalScrollIndicator={false}

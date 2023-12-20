@@ -1,26 +1,24 @@
-import { View, Text, Image, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, Image, KeyboardAvoidingView, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import styles from './register.styles'
 import IMAGES from '../../images/images'
 import TextInputField from '../../components/textinput-field/textinput-field.component'
 import RadioButton from '../../components/radio-button/radio-button.component'
 import PrimaryButton from '../../components/primary-button/primary-button.component'
+import { useForm, Controller } from 'react-hook-form'
 
 const Register = () => {
+  const { control, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log('data', data);
+  }
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false)
   const [valueArray, setValueArray] = useState([
     { id: 1, label: "Chủ shop", isCheckRadio: false },
     { id: 2, label: "Người mua hàng", isCheckRadio: false },
   ]);
-
-  const handleCheck = (id) => {
-    valueArray.forEach(element => {
-      if (element.id === id) element.isCheckRadio = true
-      else element.isCheckRadio = false
-    });
-    setValueArray([...valueArray])
-  }
 
   return (
     <ScrollView style={styles.containerScrollView}>
@@ -36,34 +34,73 @@ const Register = () => {
             <Text style={styles.appName}>Ecommerce App</Text>
           </View>
 
-          <TextInputField
-            label="Tên đăng nhập"
-            iconLeft="person-outline"
-            placeholder={"Tên đăng nhập"}
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInputField
+                label="Tên đăng nhập"
+                iconLeft="person-outline"
+                placeholder={"Tên đăng nhập"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="username"
           />
 
-          <TextInputField
-            label="Email"
-            iconLeft="mail-outline"
-            placeholder={"Email"}
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInputField
+                label="Email"
+                iconLeft="mail-outline"
+                placeholder={"Email"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="email"
           />
 
-          <TextInputField
-            label="Mật khẩu"
-            iconLeft="key-outline"
-            iconRight={isShowPassword ? "eye-outline" : "eye-off-outline"}
-            placeholder={"Mật khẩu"}
-            isShowPassword={isShowPassword}
-            onPress={() => setIsShowPassword(!isShowPassword)}
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInputField
+                label="Mật khẩu"
+                iconLeft="key-outline"
+                iconRight={isShowPassword ? "eye-outline" : "eye-off-outline"}
+                placeholder={"Mật khẩu"}
+                isShowPassword={isShowPassword}
+                onPress={() => setIsShowPassword(!isShowPassword)}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="password"
           />
-          <TextInputField
-            label="Xác nhận mật khẩu"
-            iconLeft="key-outline"
-            iconRight={isShowConfirmPassword ? "eye-outline" : "eye-off-outline"}
-            placeholder={"Xác nhận mật khẩu"}
-            isShowPassword={isShowConfirmPassword}
-            onPress={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInputField
+                label="Xác nhận mật khẩu"
+                iconLeft="key-outline"
+                iconRight={isShowConfirmPassword ? "eye-outline" : "eye-off-outline"}
+                placeholder={"Xác nhận mật khẩu"}
+                isShowPassword={isShowConfirmPassword}
+                onPress={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="confirmPassword"
           />
+
+
           <Text style={styles.text}>Bạn đăng ký tài khoản với vai trò là:</Text>
 
           <View style={styles.containerRadioButton}>
@@ -78,14 +115,14 @@ const Register = () => {
           </View>
           <PrimaryButton
             style={styles.primaryButton}
+            onPress={handleSubmit(onSubmit)}
           >
             Đăng ký
           </PrimaryButton>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
-
   )
 }
 
-export default Register
+export default Register;
