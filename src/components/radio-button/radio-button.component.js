@@ -2,7 +2,10 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import styles from './radio-button.styles'
 
-const RadioButton = ({ label, isCheckRadio, onPress }) => {
+const RadioButton = ({ label, isCheckRadio, onChange, value }) => {
+  const onPress = () => {
+    onChange(value)
+  }
   return (
     <TouchableOpacity style={styles.container}
       onPress={onPress}

@@ -11,10 +11,13 @@ const styles = StyleSheet.create({
     marginBottom: 25
   },
   image: {
-    width: 100, height: 100
+    width: 100,
+    height: 100
   },
   appName: {
-    fontSize: 30, fontWeight: 'bold', color: '#c5c5c7'
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#c5c5c7'
   },
   containerRadioButton: {
     flexDirection: "row",
@@ -30,7 +33,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   primaryButton: {
-    borderRadius: 31, marginTop: 20, marginBottom: 20
+    borderRadius: 31,
+    marginTop: 20,
+    marginBottom: 20
   }
 })
 

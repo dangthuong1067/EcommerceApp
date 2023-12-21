@@ -4,7 +4,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
-    // paddingHorizontal: 15,
   },
   textHome: {
     textAlign: 'center',
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
   carousel: {
     paddingTop: 10,
     paddingHorizontal: 15
-    // marginHorizontal: 15
   },
   containerItem: (lastIndex, index) => ({
     marginRight: lastIndex === index ? 15 : 0
@@ -59,7 +57,6 @@ const styles = StyleSheet.create({
   imageCategory: {
     height: 100,
     resizeMode: 'contain',
-
   },
   categoryName: {
     textAlign: 'center',
@@ -72,12 +69,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d5d6db',
-    //marginRight: 15
     marginLeft: 10,
     marginRight: lastIndex === index ? 10 : 0
   }),
   itemWithCategory: {
-    marginTop: 10, marginBottom: 20
+    marginTop: 10,
+    marginBottom: 20
   }
 
 })

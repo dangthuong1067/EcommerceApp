@@ -8,22 +8,23 @@ import PrimaryButton from '../../components/primary-button/primary-button.compon
 import { useForm, Controller } from 'react-hook-form'
 
 const Register = () => {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "buyer"
+    }
+  });
 
   const onSubmit = (data) => {
     console.log('data', data);
   }
-  const [isShowPassword, setIsShowPassword] = useState(false)
-  const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false)
-  const [valueArray, setValueArray] = useState([
-    { id: 1, label: "Chủ shop", isCheckRadio: false },
-    { id: 2, label: "Người mua hàng", isCheckRadio: false },
-  ]);
 
   return (
     <ScrollView style={styles.containerScrollView}>
       <KeyboardAvoidingView
-        behavior="position"
         style={styles.flex1}
       >
         <View style={styles.container}>
@@ -70,10 +71,10 @@ const Register = () => {
               <TextInputField
                 label="Mật khẩu"
                 iconLeft="key-outline"
-                iconRight={isShowPassword ? "eye-outline" : "eye-off-outline"}
+                showPassword={"eye-off-outline"}
+                hidePassword={"eye-outline"}
                 placeholder={"Mật khẩu"}
-                isShowPassword={isShowPassword}
-                onPress={() => setIsShowPassword(!isShowPassword)}
+                password
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -88,10 +89,10 @@ const Register = () => {
               <TextInputField
                 label="Xác nhận mật khẩu"
                 iconLeft="key-outline"
-                iconRight={isShowConfirmPassword ? "eye-outline" : "eye-off-outline"}
+                showPassword={"eye-off-outline"}
+                hidePassword={"eye-outline"}
                 placeholder={"Xác nhận mật khẩu"}
-                isShowPassword={isShowConfirmPassword}
-                onPress={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                confirmPassword
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -100,18 +101,41 @@ const Register = () => {
             name="confirmPassword"
           />
 
-
           <Text style={styles.text}>Bạn đăng ký tài khoản với vai trò là:</Text>
 
           <View style={styles.containerRadioButton}>
-            {valueArray.map((item) => (
-              <RadioButton
-                label={item.label}
-                isCheckRadio={item.isCheckRadio}
-                key={item.id}
-                onPress={() => handleCheck(item.id)}
-              />
-            ))}
+            <Controller
+              control={control}
+              render={(obj) => {
+                const { field: { onChange, value } } = obj
+                return (
+                  <RadioButton
+                    label={"Người mua hàng"}
+                    isCheckRadio={value === "buyer"}
+                    value="buyer"
+                    onChange={onChange}
+                  />
+                )
+              }}
+              name='role'
+            />
+
+            <Controller
+              control={control}
+              render={(obj) => {
+                const { field: { onChange, value } } = obj
+                return (
+                  <RadioButton
+                    label={"Chủ shop"}
+                    isCheckRadio={value === "owner"}
+                    value="owner"
+                    onChange={onChange}
+                  />
+                )
+              }}
+              name='role'
+            />
+
           </View>
           <PrimaryButton
             style={styles.primaryButton}

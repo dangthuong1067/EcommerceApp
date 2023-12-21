@@ -11,10 +11,13 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   image: {
-    width: 100, height: 100
+    width: 100,
+    height: 100
   },
   appName: {
-    fontSize: 30, fontWeight: 'bold', color: '#c5c5c7'
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#c5c5c7'
   },
   containerRadioButton: {
     flexDirection: "row",
@@ -26,13 +29,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   textRegister: {
-    fontSize: 18, color: '#00CC33'
+    fontSize: 18,
+    color: '#00CC33'
   },
   textAlreadyHaveAnAccount: {
-    fontSize: 18, marginRight: 5
+    fontSize: 18,
+    marginRight: 5
   },
   primaryButton: {
-    borderRadius: 31, marginTop: 20, marginBottom: 20
+    borderRadius: 31,
+    marginTop: 20,
+    marginBottom: 20
   },
   textForgotPassword: {
     fontSize: 18
