@@ -1,11 +1,12 @@
-import { View, Text, Image, KeyboardAvoidingView, ScrollView } from 'react-native'
 import React, { useState } from 'react'
+import { View, Text, Image, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+
 import styles from './register.styles'
 import IMAGES from '../../images/images'
 import TextInputField from '../../components/textinput-field/textinput-field.component'
 import RadioButton from '../../components/radio-button/radio-button.component'
 import PrimaryButton from '../../components/primary-button/primary-button.component'
-import { useForm, Controller } from 'react-hook-form'
 
 const Register = () => {
   const { control, handleSubmit } = useForm({
@@ -71,10 +72,8 @@ const Register = () => {
               <TextInputField
                 label="Mật khẩu"
                 iconLeft="key-outline"
-                showPassword={"eye-off-outline"}
-                hidePassword={"eye-outline"}
-                placeholder={"Mật khẩu"}
-                password
+                placeholder="Mật khẩu"
+                secure
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -89,10 +88,8 @@ const Register = () => {
               <TextInputField
                 label="Xác nhận mật khẩu"
                 iconLeft="key-outline"
-                showPassword={"eye-off-outline"}
-                hidePassword={"eye-outline"}
                 placeholder={"Xác nhận mật khẩu"}
-                confirmPassword
+                secure
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
