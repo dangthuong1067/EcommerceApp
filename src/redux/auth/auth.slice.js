@@ -68,11 +68,10 @@ export const loginThunk = createAsyncThunk(
 
 
 export const signupThunk = createAsyncThunk(
-  'auth/loginThunk',
+  'auth/signupThunk',
   async (data, thunkAPI) => {
     console.log('process.env.API_URL', process.env.API_URL);
-    const { username, password } = data
-    console.log('username password', username, password);
+    const { username, email, password, confirmPassword, role } = data;
     const response = await fetch(
       `${process.env.API_URL}/auth/signup`,
       {
@@ -82,18 +81,18 @@ export const signupThunk = createAsyncThunk(
         },
         body: JSON.stringify({
           username,
-          password
+          email,
+          password,
+          confirmPassword,
+          role
         })
       }
     )
     console.log('response', response);
     if (!response.ok) {
-      return thunkAPI.rejectWithValue('Can not login')
+      return thunkAPI.rejectWithValue('Can not login');
     }
 
-    const { data: { token } } = await response.json()
-    await AsyncStorage.setItem('token', token)
-    return token
   }
 )
 export const logoutThunk = createAsyncThunk(

@@ -1,4 +1,4 @@
-import { Pressable, Text } from "react-native"
+import { Pressable, Text, TouchableOpacity } from "react-native"
 import LinearGradient from 'react-native-linear-gradient';
 import styles from "./primary-button.styles";
 const PrimaryButton = ({
@@ -7,9 +7,10 @@ const PrimaryButton = ({
   onPress,
   ...props
 }) => (
-  <Pressable
-    style={(pressed) =>
-      [styles.button, { opacity: pressed ? 0.8 : 1 }, style]}
+  <TouchableOpacity
+    // style={(pressed) =>
+    //   [styles.button, { opacity: pressed ? 0.8 : 1 }, style]}
+    style={[styles.button, style]}
     onPress={onPress}
     {...props}
   >
@@ -23,7 +24,7 @@ const PrimaryButton = ({
         : children
       }
     </LinearGradient>
-  </Pressable>
+  </TouchableOpacity>
 )
 
 export default PrimaryButton

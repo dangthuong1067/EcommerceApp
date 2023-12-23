@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { View, Text, Image, KeyboardAvoidingView, ScrollView, Alert } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 
 import styles from './register.styles'
@@ -7,8 +7,10 @@ import IMAGES from '../../images/images'
 import TextInputField from '../../components/textinput-field/textinput-field.component'
 import RadioButton from '../../components/radio-button/radio-button.component'
 import PrimaryButton from '../../components/primary-button/primary-button.component'
+import { useDispatch } from 'react-redux'
+import { signupThunk } from '../../redux/auth/auth.slice'
 
-const Register = () => {
+const Register = ({ navigation }) => {
   const {
     control,
     handleSubmit,
@@ -24,8 +26,16 @@ const Register = () => {
     }
   });
 
+  const dispatch = useDispatch();
+
   const onSubmit = (data) => {
-    console.log('data', data);
+    try {
+      dispatch(signupThunk(data)).unwrap()
+      navigation.navigate("Login");
+      Alert.alert("Đăng ký thành công");
+    } catch (error) {
+      Alert.alert(error);
+    }
   }
 
   return (
@@ -121,11 +131,11 @@ const Register = () => {
                 value: 6,
                 message: 'Mật khẩu phải có ít nhất 6 ký tự',
               },
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-                message:
-                  'Mật khẩu phải chứa ít nhất một chữ cái viết thường, một chữ cái viết hoa, một số và một ký tự đặc biệt',
-              },
+              // pattern: {
+              //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+              //   message:
+              //     'Mật khẩu phải chứa ít nhất một chữ cái viết thường, một chữ cái viết hoa, một số và một ký tự đặc biệt',
+              // },
             }}
           />
           {errors.password &&
