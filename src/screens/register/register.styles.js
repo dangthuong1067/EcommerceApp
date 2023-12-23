@@ -37,7 +37,17 @@ const styles = StyleSheet.create({
   containerScrollView: {
     flex: 1,
     paddingTop: 10
-  }
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+  },
+  containerTextInputField: (errors) => ({
+    marginBottom: errors ? 0 : 10
+  }),
+  containerError: {
+    marginBottom: 5
+  },
 
 })
 

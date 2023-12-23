@@ -9,7 +9,12 @@ import RadioButton from '../../components/radio-button/radio-button.component'
 import PrimaryButton from '../../components/primary-button/primary-button.component'
 
 const Register = () => {
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm({
     defaultValues: {
       username: "",
       email: "",
@@ -39,64 +44,123 @@ const Register = () => {
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInputField
-                label="Tên đăng nhập"
-                iconLeft="person-outline"
-                placeholder={"Tên đăng nhập"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
+              <View style={styles.containerTextInputField(errors.username)}>
+                <TextInputField
+                  label="Tên đăng nhập"
+                  iconLeft="person-outline"
+                  placeholder="Tên đăng nhập"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              </View>
             )}
             name="username"
+            rules={{
+              required: 'Tên đăng nhập không được bỏ trống',
+              minLength: {
+                value: 3,
+                message: 'Tên đăng nhập phải có ít nhất 3 ký tự',
+              },
+            }}
           />
+          {errors.username &&
+            <View style={styles.containerError}>
+              <Text style={styles.errorText}>{errors.username.message}</Text>
+            </View>
+          }
 
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInputField
-                label="Email"
-                iconLeft="mail-outline"
-                placeholder={"Email"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
+              <View style={styles.containerTextInputField(errors.email)}>
+                <TextInputField
+                  label="Email"
+                  iconLeft="mail-outline"
+                  placeholder="Email"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              </View>
             )}
             name="email"
+            rules={{
+              required: 'Email không được bỏ trống',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                message: 'Email không hợp lệ',
+              },
+            }}
           />
+          {errors.email &&
+            <View style={styles.containerError}>
+              <Text style={styles.errorText}>{errors.email.message}</Text>
+            </View>
+          }
 
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInputField
-                label="Mật khẩu"
-                iconLeft="key-outline"
-                placeholder="Mật khẩu"
-                secure
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
+              <View style={styles.containerTextInputField(errors.password)}>
+                <TextInputField
+                  label="Mật khẩu"
+                  iconLeft="key-outline"
+                  placeholder="Mật khẩu"
+                  secure
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              </View>
             )}
             name="password"
+            rules={{
+              required: 'Mật khẩu không được bỏ trống',
+              minLength: {
+                value: 6,
+                message: 'Mật khẩu phải có ít nhất 6 ký tự',
+              },
+              pattern: {
+                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                message:
+                  'Mật khẩu phải chứa ít nhất một chữ cái viết thường, một chữ cái viết hoa, một số và một ký tự đặc biệt',
+              },
+            }}
           />
+          {errors.password &&
+            <View style={styles.containerError}>
+              <Text style={styles.errorText}>{errors.password.message}</Text>
+            </View>
+          }
 
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInputField
-                label="Xác nhận mật khẩu"
-                iconLeft="key-outline"
-                placeholder={"Xác nhận mật khẩu"}
-                secure
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
+              <View style={styles.containerTextInputField(errors.confirmPassword)}>
+                <TextInputField
+                  label="Xác nhận mật khẩu"
+                  iconLeft="key-outline"
+                  placeholder="Xác nhận mật khẩu"
+                  secure
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              </View>
             )}
             name="confirmPassword"
+            rules={{
+              required: 'Xác nhận mật khẩu không được bỏ trống',
+              validate: (value) =>
+                value === getValues('password') || 'Mật khẩu xác nhận không khớp',
+            }}
           />
+          {errors.confirmPassword && (
+            <View style={styles.containerError}>
+              <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
+            </View>
+          )}
 
           <Text style={styles.text}>Bạn đăng ký tài khoản với vai trò là:</Text>
 
@@ -107,7 +171,7 @@ const Register = () => {
                 const { field: { onChange, value } } = obj
                 return (
                   <RadioButton
-                    label={"Người mua hàng"}
+                    label="Người mua hàng"
                     isCheckRadio={value === "buyer"}
                     value="buyer"
                     onChange={onChange}
@@ -123,7 +187,7 @@ const Register = () => {
                 const { field: { onChange, value } } = obj
                 return (
                   <RadioButton
-                    label={"Chủ shop"}
+                    label="Chủ shop"
                     isCheckRadio={value === "owner"}
                     value="owner"
                     onChange={onChange}

@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     marginTop: 5,
-    marginBottom: 13
   },
   label: {
     fontSize: 18
@@ -23,7 +22,6 @@ const styles = StyleSheet.create({
   placeholder: {
     fontSize: 15
   }
-
 })
 
 export default styles
