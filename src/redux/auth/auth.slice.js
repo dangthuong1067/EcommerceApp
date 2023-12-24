@@ -1,3 +1,4 @@
+import { Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   createSlice,
@@ -90,7 +91,8 @@ export const signupThunk = createAsyncThunk(
     )
     console.log('response', response);
     if (!response.ok) {
-      return thunkAPI.rejectWithValue('Can not login');
+      return Alert.alert("Trùng email với một người dùng khác. Vui lòng đăng ký với một tên email khác!")
+      // return thunkAPI.rejectWithValue('Can not signup');
     }
 
   }

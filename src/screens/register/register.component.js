@@ -28,9 +28,9 @@ const Register = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      dispatch(signupThunk(data)).unwrap()
+      await dispatch(signupThunk(data)).unwrap()
       navigation.navigate("Login");
       Alert.alert("Đăng ký thành công");
     } catch (error) {
