@@ -7,7 +7,7 @@ import IMAGES from '../../images/images'
 import TextInputField from '../../components/textinput-field/textinput-field.component'
 import RadioButton from '../../components/radio-button/radio-button.component'
 import PrimaryButton from '../../components/primary-button/primary-button.component'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { signupThunk } from '../../redux/auth/auth.slice'
 
 const Register = ({ navigation }) => {
@@ -27,12 +27,18 @@ const Register = ({ navigation }) => {
   });
 
   const dispatch = useDispatch();
-
+  const { status } = useSelector(state => state.auth)
+  console.log('status', status);
   const onSubmit = async (data) => {
     try {
       await dispatch(signupThunk(data)).unwrap()
-      navigation.navigate("Login");
-      Alert.alert("Đăng ký thành công");
+      if (status === "success") {
+        navigation.navigate("Login");
+        Alert.alert("Đăng ký thành công");
+      } else if (status === "fail") {
+        Alert.alert("Trùng email với một người dùng khác. Vui lòng đăng ký với một tên email khác!")
+      }
+
     } catch (error) {
       Alert.alert(error);
     }

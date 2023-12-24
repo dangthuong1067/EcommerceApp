@@ -9,6 +9,7 @@ import {
 const INIT_STATE = {
   token: null,
   loading: true,
+  status: "success"
 }
 
 const authSlice = createSlice({
@@ -20,6 +21,9 @@ const authSlice = createSlice({
       .addCase(getTokenThunk.fulfilled, (state, action) => {
         state.token = action.payload
         state.loading = false
+      })
+      .addCase(signupThunk.fulfilled, (state, action) => {
+        state.status = action.payload
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.token = action.payload
@@ -91,8 +95,11 @@ export const signupThunk = createAsyncThunk(
     )
     console.log('response', response);
     if (!response.ok) {
-      return Alert.alert("Trùng email với một người dùng khác. Vui lòng đăng ký với một tên email khác!")
+      return "fail";
+      // return Alert.alert("Trùng email với một người dùng khác. Vui lòng đăng ký với một tên email khác!")
       // return thunkAPI.rejectWithValue('Can not signup');
+    } else {
+      return "success"
     }
 
   }
