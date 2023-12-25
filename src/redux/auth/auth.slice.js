@@ -22,9 +22,10 @@ const authSlice = createSlice({
         state.token = action.payload
         state.loading = false
       })
-      .addCase(signupThunk.fulfilled, (state, action) => {
-        state.status = action.payload
-      })
+      // .addCase(signupThunk.fulfilled, (state, action) => {
+      //   console.log("thực thi thunk");
+      //   state.status = action.payload;
+      // })
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.token = action.payload
       })
@@ -93,15 +94,13 @@ export const signupThunk = createAsyncThunk(
         })
       }
     )
-    console.log('response', response);
-    if (!response.ok) {
-      return "fail";
-      // return Alert.alert("Trùng email với một người dùng khác. Vui lòng đăng ký với một tên email khác!")
-      // return thunkAPI.rejectWithValue('Can not signup');
-    } else {
-      return "success"
-    }
 
+    if (!response.ok) {
+      const { message } = await response.json();
+      if (message === "Duplicate Email. Please try again") {
+        return thunkAPI.rejectWithValue("Email này đã được dùng. Vui lòng tạo email khác!");
+      }
+    }
   }
 )
 export const logoutThunk = createAsyncThunk(

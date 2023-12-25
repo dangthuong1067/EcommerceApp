@@ -6,7 +6,7 @@ import TextInputField from '../../components/textinput-field/textinput-field.com
 import PrimaryButton from '../../components/primary-button/primary-button.component'
 import CheckBox from '../../components/checkbox/checkbox.component'
 
-const Login = () => {
+const Login = ({ navigation }) => {
   const [isCheck, setIsCheck] = useState(false)
   const [isShowPassword, setIsShowPassword] = useState(false)
   return (
@@ -49,8 +49,8 @@ const Login = () => {
         Đăng nhập
       </PrimaryButton>
       <View style={styles.contentBottom}>
-        <Text style={styles.textAlreadyHaveAnAccount}>Bạn đã có tài khoản?</Text>
-        <TouchableOpacity>
+        <Text style={styles.textAlreadyHaveAnAccount}>Bạn chưa có tài khoản?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text style={styles.textRegister}>Đăng ký</Text>
         </TouchableOpacity>
       </View>

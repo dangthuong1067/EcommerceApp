@@ -27,17 +27,10 @@ const Register = ({ navigation }) => {
   });
 
   const dispatch = useDispatch();
-  const { status } = useSelector(state => state.auth)
-  console.log('status', status);
   const onSubmit = async (data) => {
     try {
       await dispatch(signupThunk(data)).unwrap()
-      if (status === "success") {
-        navigation.navigate("Login");
-        Alert.alert("Đăng ký thành công");
-      } else if (status === "fail") {
-        Alert.alert("Trùng email với một người dùng khác. Vui lòng đăng ký với một tên email khác!")
-      }
+      navigation.navigate("Login");
 
     } catch (error) {
       Alert.alert(error);
