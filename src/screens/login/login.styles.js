@@ -28,6 +28,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  forgotPassword: {
+    alignItems: 'flex-end',
+  },
   textRegister: {
     fontSize: 18,
     color: '#00CC33'
@@ -42,13 +45,23 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   textForgotPassword: {
-    fontSize: 18
+    fontSize: 18,
+    color: "#00CC33",
   },
   contentBottom: {
-    flexDirection: 'row'
-  }
-
-
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  containerTextInputField: (errors) => ({
+    marginBottom: errors ? 0 : 10
+  }),
+  containerError: {
+    marginBottom: 5
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+  },
 })
 
 export default styles

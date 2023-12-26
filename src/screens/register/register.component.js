@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, ScrollView, Alert } from 'react-native'
+import { View, Text, Image, KeyboardAvoidingView, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 
 import styles from './register.styles'
@@ -31,7 +31,7 @@ const Register = ({ navigation }) => {
     try {
       await dispatch(signupThunk(data)).unwrap()
       navigation.navigate("Login");
-
+      Alert.alert("Đăng ký thành công");
     } catch (error) {
       Alert.alert(error);
     }
@@ -213,6 +213,12 @@ const Register = ({ navigation }) => {
           >
             Đăng ký
           </PrimaryButton>
+          <View style={styles.alreadyHaveAnAcount}>
+            <Text style={styles.text}>Bạn đã có tài khoản?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.textLogin}>Đăng nhập</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
