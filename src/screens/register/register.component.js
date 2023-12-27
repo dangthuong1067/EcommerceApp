@@ -53,35 +53,6 @@ const Register = ({ navigation }) => {
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <View style={styles.containerTextInputField(errors.username)}>
-                <TextInputField
-                  label="Tên đăng nhập"
-                  iconLeft="person-outline"
-                  placeholder="Tên đăng nhập"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              </View>
-            )}
-            name="username"
-            rules={{
-              required: 'Tên đăng nhập không được bỏ trống',
-              minLength: {
-                value: 3,
-                message: 'Tên đăng nhập phải có ít nhất 3 ký tự',
-              },
-            }}
-          />
-          {errors.username &&
-            <View style={styles.containerError}>
-              <Text style={styles.errorText}>{errors.username.message}</Text>
-            </View>
-          }
-
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
               <View style={styles.containerTextInputField(errors.email)}>
                 <TextInputField
                   label="Email"
@@ -90,6 +61,7 @@ const Register = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                 />
               </View>
             )}
@@ -120,6 +92,7 @@ const Register = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                 />
               </View>
             )}
@@ -155,6 +128,7 @@ const Register = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                 />
               </View>
             )}

@@ -101,6 +101,7 @@ const ProtectedStack = () => (
 const Navigation = () => {
   const dispatch = useDispatch();
   const { token, loading } = useSelector(state => state.auth);
+  const test = null
   let rendering = null;
 
   useEffect(() => {
@@ -109,7 +110,7 @@ const Navigation = () => {
 
   if (loading) {
     rendering = <ActivityIndicator />;
-  } else if (token === null) {
+  } else if (test === null) {
     rendering = <AuthStack />;
   }
   else {
