@@ -128,7 +128,6 @@ const Register = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  autoCapitalize="none"
                 />
               </View>
             )}

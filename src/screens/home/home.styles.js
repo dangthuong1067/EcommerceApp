@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 15
   },
-  itemCategory: (lastIndex, index) => ({
+  itemCategory: (lastIndex, index, background) => ({
     width: 120,
     alignItems: 'center',
     borderRadius: 10,
@@ -52,10 +52,12 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     borderWidth: 1,
     borderColor: '#d5d6db',
-    marginRight: lastIndex === index ? 15 : 0
+    marginRight: lastIndex === index ? 15 : 0,
+    backgroundColor: background
   }),
   imageCategory: {
     height: 100,
+    width: '100%',
     resizeMode: 'contain',
   },
   categoryName: {

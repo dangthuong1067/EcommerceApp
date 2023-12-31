@@ -21,7 +21,7 @@ const Carousel = ({ data }) => {
       style={styles.item(screenWidth)}
     >
       <Image
-        source={item.image}
+        source={{ uri: item.imageUrl }}
         style={styles.image(screenWidth)}
       />
     </View>

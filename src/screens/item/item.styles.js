@@ -48,9 +48,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#ce4547',
   },
-  capacity: {
-    fontSize: 18
+  containerCapacity: {
+    flexDirection: 'row',
+    marginVertical: 3
   },
+  capacity: (index, indexSelect) => ({
+    borderWidth: 1,
+    borderColor: index == indexSelect ? "#47ba64" : '#495057',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 7,
+    borderRadius: 5,
+    marginRight: 10
+  }),
+  capacityText: (index, indexSelect) => ({
+    fontSize: 16,
+    color: index == indexSelect ? "#47ba64" : null
+  }),
   priceAndAddCart: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -73,6 +87,7 @@ const styles = StyleSheet.create({
   percent: {
     fontSize: 17
   }
+  // color: "#47ba64"
 })
 
 export default styles

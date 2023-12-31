@@ -3,13 +3,13 @@ import productsReducer from "./products/products.slice";
 import authReducer from './auth/auth.slice'
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from './user/user.slice'
-
+import homeReducer from "./home/home.slice";
 const store = configureStore({
   reducer: {
-    products: productsReducer,
     // cart: cartReducer,
     auth: authReducer,
-    user: userReducer
+    user: userReducer,
+    home: homeReducer
   }
 })
 

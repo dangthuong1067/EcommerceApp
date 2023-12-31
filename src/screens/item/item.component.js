@@ -1,23 +1,48 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { formatCurrency } from '../../helpers/Utils';
 import styles from './item.styles';
 const Item = ({ item }) => {
+  const [indexSelected, setIndexSelected] = useState(0)
+  const [isSelect, setIsSelect] = useState(false)
+
+  const discountFunction = (price, reducedPrice) => {
+    const discount = ((price - reducedPrice) / price) * 100;
+    return discount;
+  }
   return (
     <View style={styles.container}>
-      <Image source={item.image} style={styles.image} resizeMode="contain" />
+      <Image source={{ uri: item.items[indexSelected].image }} style={styles.image} resizeMode="contain" />
       <View style={styles.discount}>
         <Text style={styles.textDiscount}><Text style={styles.percent}>10%</Text> GIẢM GIÁ</Text>
       </View>
 
       <View style={styles.content}>
         <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.capacity}>{item.capacity}</Text>
+        <View style={styles.containerCapacity}>
+          {item.items.map((item, index) => {
+            const discount = discountFunction(item.price, item.reducedPrice)
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  setIndexSelected(index)
+                  setIsSelect(true)
+                }}
+                style={styles.capacity(index, indexSelected)}
+                key={index}
+              >
+                <Text style={styles.capacityText(index, indexSelected)}>{item.capacity}</Text>
+              </TouchableOpacity>
+            )
+          }
+          )}
+        </View>
+
 
         <View style={styles.priceAndAddCart}>
           <View>
-            <Text style={styles.price}>{formatCurrency(item.price)}</Text>
-            <Text style={styles.reducedPrice}>{formatCurrency(item.reducedPrice)}</Text>
+            <Text style={styles.price}>{formatCurrency(item.items[indexSelected].price)}</Text>
+            <Text style={styles.reducedPrice}>{formatCurrency(item.items[indexSelected].reducedPrice)}</Text>
           </View>
 
           <TouchableOpacity style={styles.addCart}>

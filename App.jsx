@@ -110,7 +110,7 @@ const Navigation = () => {
 
   if (loading) {
     rendering = <ActivityIndicator />;
-  } else if (test === null) {
+  } else if (token === null) {
     rendering = <AuthStack />;
   }
   else {

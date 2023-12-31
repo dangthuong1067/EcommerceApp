@@ -6,24 +6,61 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
 import data, { productCategory, productData } from '../../../data';
+import { useDispatch, useSelector } from 'react-redux';
+import { getBannersThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk } from '../../redux/home/home.slice';
 
 const Home = ({ navigation }) => {
-  const [newProductCategory, setNewProductCategory] = useState(productCategory)
-  const [productDataFiltered, setProductDataFiltered] = useState(productData)
+  const dispatch = useDispatch();
+  const { token } = useSelector(state => state.auth);
+  const { banners } = useSelector(state => state.home);
+  const { products } = useSelector(state => state.home);
+  const { saleProducts } = useSelector(state => state.home);
+  const { popularProducts } = useSelector(state => state.home);
+  const { categories } = useSelector(state => state.home);
+  const { productsByCategory } = useSelector(state => state.home);
+
+  const newCategories = [{ id: 0, categoryName: 'TẤT CẢ' }, ...categories];
+
+  const [newArrayCategories, setNewArrayCategories] = useState(newCategories);
+  const [productDataFiltered, setProductDataFiltered] = useState(productData);
+
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const getData = async () => {
+    await dispatch(getProductsThunk('sale'))
+    await dispatch(getProductsThunk('popular'))
+    await dispatch(getBannersThunk())
+    await dispatch(getCategoriesThunk())
+
+    await dispatch(getProductsThunk('popular'))
+
+
+  }
 
   const filterWithCategory = (idCategory) => {
-    productCategory.forEach(item => {
-      if (item.id === idCategory) item.isSelectCategory = true
-      else item.isSelectCategory = false
+    newCategories.forEach(item => {
+      if (item.id === idCategory) {
+        item.isSelectCategory = true;
+      }
+      else item.isSelectCategory = false;
     });
 
-    setNewProductCategory(productCategory)
-    if (idCategory === 1) {
-      setProductDataFiltered([...productData])
-    } else {
-      const newProductData = productData.filter(item => item.idCategory === idCategory)
-      setProductDataFiltered(newProductData)
-    }
+    setNewArrayCategories([...newCategories]);
+
+
+    dispatch(getProductsByCategoryThunk(idCategory));
+
+
+
+    // if (idCategory === 1) {
+    //   setProductDataFiltered([...productData])
+    // } else {
+    //   const newProductData = productData.filter(item => item.idCategory === idCategory)
+    //   setProductDataFiltered(newProductData)
+    // }
   }
 
   return (
@@ -49,7 +86,7 @@ const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.carousel}>
-          <Carousel data={data} />
+          <Carousel data={banners} />
         </View>
 
         <View style={styles.preferentialProducts}>
@@ -61,7 +98,30 @@ const Home = ({ navigation }) => {
 
         <View >
           <FlatList
-            data={productData}
+            data={saleProducts}
+            renderItem={({ item }) =>
+              <View style={styles.containerItem}>
+                <Item
+                  item={item}
+                />
+              </View>
+            }
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+
+
+        <View style={styles.preferentialProducts}>
+          <Text style={styles.text}>Sản phẩm phổ biến</Text>
+          <TouchableOpacity>
+            <Text style={styles.textSeeAll}>Xem tất cả</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View >
+          <FlatList
+            data={popularProducts}
             renderItem={({ item }) =>
               <View style={styles.containerItem}>
                 <Item
@@ -86,19 +146,15 @@ const Home = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
         // style={{ marginHorizontal: 15 }}
         >
-          {productCategory.filter(item => item.id !== 1).map((item, index) => {
-            const newProductCategory = productCategory.filter(item => item.id !== 1)
-            const lastIndex = newProductCategory.length - 1
-            console.log('lastIndex', lastIndex);
-            console.log('index', index);
-            console.log('item', item);
+          {categories.map((item, index) => {
+            const lastIndex = categories.length - 1
             return (
               <TouchableOpacity
-                style={styles.itemCategory(lastIndex, index)}
+                style={[styles.itemCategory(lastIndex, index)]}
                 key={item.id}
               >
                 <Image
-                  source={item.image} style={styles.imageCategory}
+                  source={{ uri: item.image }} style={styles.imageCategory}
                 />
                 <Text style={styles.categoryName}>{item.categoryName}</Text>
               </TouchableOpacity>
@@ -117,8 +173,8 @@ const Home = ({ navigation }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
         >
-          {newProductCategory.map((item, index) => {
-            const lastIndex = newProductCategory.length - 1
+          {newArrayCategories.map((item, index) => {
+            const lastIndex = newArrayCategories.length - 1
             return (
               <TouchableOpacity
                 onPress={() => filterWithCategory(item.id)}
@@ -133,9 +189,9 @@ const Home = ({ navigation }) => {
 
         <View style={styles.itemWithCategory}>
           <FlatList
-            data={productDataFiltered}
+            data={productsByCategory}
             renderItem={({ item, index }) => {
-              const lastIndex = productDataFiltered.length - 1
+              const lastIndex = productsByCategory.length - 1
               return (
                 <View style={styles.containerItem(lastIndex, index)}>
                   <Item
@@ -149,7 +205,7 @@ const Home = ({ navigation }) => {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-      </ScrollView>
+      </ScrollView >
     </>
   )
 }
