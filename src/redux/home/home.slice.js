@@ -7,7 +7,6 @@ import request from '../../helpers/request';
 const INIT_STATE = {
   // token: null,
   // loading: true,
-  // status: "success"
   banners: [],
   products: [],
   categories: [],
@@ -28,11 +27,11 @@ const homeSlice = createSlice({
         state.banners = action.payload;
       })
       .addCase(getProductsThunk.fulfilled, (state, action) => {
-        const tag = action.payload.tag
+        const tag = action.payload.tag;
         if (tag === 'sale') {
-          state.saleProducts = action.payload.products
+          state.saleProducts = action.payload.products;
         } else if (tag === 'popular') {
-          state.popularProducts = action.payload.products
+          state.popularProducts = action.payload.products;
         }
         // else {
         //   state.products = action.payload.products
@@ -45,11 +44,8 @@ const homeSlice = createSlice({
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
         state.productsByCategory = action.payload;
       })
-
-
   }
 })
-
 
 export const getBannersThunk = createAsyncThunk(
   'home/getBannersThunk',
@@ -78,9 +74,8 @@ export const getCategoriesThunk = createAsyncThunk(
     )
 
     if (response.ok) {
-      const data = await response.json()
-      const categories = data.data.categories
-
+      const data = await response.json();
+      const categories = data.data.categories;
       return categories;
     }
     return thunkAPI.rejectWithValue('Can not fetch data');
@@ -109,7 +104,6 @@ export const getProductsThunk = createAsyncThunk(
   }
 )
 
-
 export const getProductsByCategoryThunk = createAsyncThunk(
   'home/getProductsByCategoryThunk',
   async (categoryId = '', thunkAPI) => {
@@ -122,15 +116,12 @@ export const getProductsByCategoryThunk = createAsyncThunk(
     )
 
     if (response.ok) {
-      const data = await response.json()
-      const products = data.data.products
+      const data = await response.json();
+      const products = data.data.products;
       return products;
     }
     return thunkAPI.rejectWithValue('Can not fetch data');
   }
 )
 
-
-
-
-export default homeSlice.reducer
+export default homeSlice.reducer;

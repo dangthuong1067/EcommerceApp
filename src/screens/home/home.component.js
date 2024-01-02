@@ -1,12 +1,12 @@
 import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, FlatList } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import Carousel from '../../components/carousel/Carousel';
 import styles from './home.styles';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
 import data, { productCategory, productData } from '../../../data';
-import { useDispatch, useSelector } from 'react-redux';
 import { getBannersThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk } from '../../redux/home/home.slice';
 
 const Home = ({ navigation }) => {
@@ -18,49 +18,88 @@ const Home = ({ navigation }) => {
   const { popularProducts } = useSelector(state => state.home);
   const { categories } = useSelector(state => state.home);
   const { productsByCategory } = useSelector(state => state.home);
+  //const newCategories = [{ id: 0, categoryName: 'TẤT CẢ' }, ...categories];
 
-  const newCategories = [{ id: 0, categoryName: 'TẤT CẢ' }, ...categories];
 
-  const [newArrayCategories, setNewArrayCategories] = useState(newCategories);
+  const array = [
+    {
+      id: 1,
+      categoryName: 'TẤT CẢ',
+    },
+    {
+      id: 2,
+      categoryName: 'SAMSUNG',
+      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/samsung-logo-transparent.png",
+      background: '#bac5c1',
+    },
+    {
+      id: 3,
+      categoryName: 'IPHONE',
+      image: "https://w7.pngwing.com/pngs/664/673/png-transparent-apple-logo-iphone-computer-apple-logo-company-heart-logo.png",
+      background: '#fdf6ec',
+    },
+    {
+      id: 4,
+      categoryName: 'VIVO',
+      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/vivo-logo.png",
+      background: '#fde8e5',
+    },
+    {
+      id: 5,
+      categoryName: 'XIAOMI',
+      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/07/18/xiaomi-logo.png",
+      background: '#f4eaf5',
+    },
+    {
+      id: 6,
+      categoryName: 'OPPO',
+      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(3).png",
+      background: '#b0b7bd',
+    }
+  ]
+
+  // const array = [...categories]
+  // array.unshift({
+  //   id: 1,
+  //   categoryName: 'TẤT CẢ',
+  // });
+
+  const [newArrayCategories, setNewArrayCategories] = useState(array)
   const [productDataFiltered, setProductDataFiltered] = useState(productData);
 
 
+  // useLayoutEffect(() => {
+  //   setNewArrayCategories([...array])
+  // }, [categories])
+
   useEffect(() => {
+    // setNewArrayCategories([...array])
     getData();
   }, [])
 
   const getData = async () => {
-    await dispatch(getProductsThunk('sale'))
-    await dispatch(getProductsThunk('popular'))
-    await dispatch(getBannersThunk())
-    await dispatch(getCategoriesThunk())
+    await dispatch(getBannersThunk());
+    await dispatch(getProductsThunk('sale'));
+    await dispatch(getProductsThunk('popular'));
 
-    await dispatch(getProductsThunk('popular'))
+    await dispatch(getCategoriesThunk());
 
+    await dispatch(getProductsThunk('popular'));
 
   }
 
   const filterWithCategory = (idCategory) => {
-    newCategories.forEach(item => {
+    newArrayCategories.forEach(item => {
       if (item.id === idCategory) {
         item.isSelectCategory = true;
+      } else {
+        item.isSelectCategory = false;
       }
-      else item.isSelectCategory = false;
     });
 
-    setNewArrayCategories([...newCategories]);
-
+    setNewArrayCategories([...newArrayCategories]);
 
     dispatch(getProductsByCategoryThunk(idCategory));
-
-
-
-    // if (idCategory === 1) {
-    //   setProductDataFiltered([...productData])
-    // } else {
-    //   const newProductData = productData.filter(item => item.idCategory === idCategory)
-    //   setProductDataFiltered(newProductData)
-    // }
   }
 
   return (
@@ -96,16 +135,19 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View >
+        <View>
           <FlatList
-            data={saleProducts}
-            renderItem={({ item }) =>
-              <View style={styles.containerItem}>
-                <Item
-                  item={item}
-                />
-              </View>
-            }
+            data={saleProducts.slice(0, 5)}
+            renderItem={({ item, index }) => {
+              const lastIndex = saleProducts.slice(0, 5).length - 1
+              return (
+                <View style={styles.containerItem(lastIndex, index)}>
+                  <Item
+                    item={item}
+                  />
+                </View>
+              )
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
           />
@@ -121,14 +163,17 @@ const Home = ({ navigation }) => {
 
         <View >
           <FlatList
-            data={popularProducts}
-            renderItem={({ item }) =>
-              <View style={styles.containerItem}>
-                <Item
-                  item={item}
-                />
-              </View>
-            }
+            data={popularProducts.slice(0, 5)}
+            renderItem={({ item, index }) => {
+              const lastIndex = popularProducts.slice(0, 5).length - 1
+              return (
+                <View style={styles.containerItem(lastIndex, index)}>
+                  <Item
+                    item={item}
+                  />
+                </View>
+              )
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
           />
@@ -210,4 +255,4 @@ const Home = ({ navigation }) => {
   )
 }
 
-export default Home
+export default Home;

@@ -1,10 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import { formatCurrency } from '../../helpers/Utils';
 import styles from './item.styles';
 const Item = ({ item }) => {
-  const [indexSelected, setIndexSelected] = useState(0)
-  const [isSelect, setIsSelect] = useState(false)
+  const [indexSelected, setIndexSelected] = useState(0);
+  const [discount, setDiscount] = useState('');
 
   const discountFunction = (price, reducedPrice) => {
     const discount = ((price - reducedPrice) / price) * 100;
@@ -14,20 +14,18 @@ const Item = ({ item }) => {
     <View style={styles.container}>
       <Image source={{ uri: item.items[indexSelected].image }} style={styles.image} resizeMode="contain" />
       <View style={styles.discount}>
-        <Text style={styles.textDiscount}><Text style={styles.percent}>10%</Text> GIẢM GIÁ</Text>
+        <Text style={styles.textDiscount}><Text style={styles.percent}>{discount}%</Text> GIẢM GIÁ</Text>
       </View>
 
       <View style={styles.content}>
         <Text style={styles.productName}>{item.name}</Text>
         <View style={styles.containerCapacity}>
           {item.items.map((item, index) => {
-            const discount = discountFunction(item.price, item.reducedPrice)
+            const discount = discountFunction(item.price, item.reducedPrice);
+            // setDiscount(discount)
             return (
               <TouchableOpacity
-                onPress={() => {
-                  setIndexSelected(index)
-                  setIsSelect(true)
-                }}
+                onPress={() => setIndexSelected(index)}
                 style={styles.capacity(index, indexSelected)}
                 key={index}
               >
