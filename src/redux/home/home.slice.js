@@ -20,7 +20,19 @@ const INIT_STATE = {
 const homeSlice = createSlice({
   name: 'home',
   initialState: INIT_STATE,
-  reducers: {},
+  reducers: {
+    updateCategories: (state, action) => {
+      const idCategory = action.payload
+      state.categories.forEach(item => {
+        if (item.id === idCategory) {
+          item.isSelectCategory = true;
+        } else {
+          item.isSelectCategory = false;
+        }
+      });
+    },
+
+  },
   extraReducers: builder => {
     builder
       .addCase(getBannersThunk.fulfilled, (state, action) => {
@@ -39,7 +51,7 @@ const homeSlice = createSlice({
         // state.products = action.payload;
       })
       .addCase(getCategoriesThunk.fulfilled, (state, action) => {
-        state.categories = action.payload;
+        state.categories = [{ id: 1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
         state.productsByCategory = action.payload;
@@ -125,3 +137,4 @@ export const getProductsByCategoryThunk = createAsyncThunk(
 )
 
 export default homeSlice.reducer;
+export const { updateCategories } = homeSlice.actions;

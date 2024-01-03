@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
 import data, { productCategory, productData } from '../../../data';
-import { getBannersThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk } from '../../redux/home/home.slice';
+import { getBannersThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk, updateCategories } from '../../redux/home/home.slice';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -18,53 +18,9 @@ const Home = ({ navigation }) => {
   const { popularProducts } = useSelector(state => state.home);
   const { categories } = useSelector(state => state.home);
   const { productsByCategory } = useSelector(state => state.home);
-  //const newCategories = [{ id: 0, categoryName: 'TẤT CẢ' }, ...categories];
 
 
-  const array = [
-    {
-      id: 1,
-      categoryName: 'TẤT CẢ',
-    },
-    {
-      id: 2,
-      categoryName: 'SAMSUNG',
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/samsung-logo-transparent.png",
-      background: '#bac5c1',
-    },
-    {
-      id: 3,
-      categoryName: 'IPHONE',
-      image: "https://w7.pngwing.com/pngs/664/673/png-transparent-apple-logo-iphone-computer-apple-logo-company-heart-logo.png",
-      background: '#fdf6ec',
-    },
-    {
-      id: 4,
-      categoryName: 'VIVO',
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/vivo-logo.png",
-      background: '#fde8e5',
-    },
-    {
-      id: 5,
-      categoryName: 'XIAOMI',
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/07/18/xiaomi-logo.png",
-      background: '#f4eaf5',
-    },
-    {
-      id: 6,
-      categoryName: 'OPPO',
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(3).png",
-      background: '#b0b7bd',
-    }
-  ]
-
-  // const array = [...categories]
-  // array.unshift({
-  //   id: 1,
-  //   categoryName: 'TẤT CẢ',
-  // });
-
-  const [newArrayCategories, setNewArrayCategories] = useState(array)
+  const [arrayCategories, setArrayCategories] = useState([])
   const [productDataFiltered, setProductDataFiltered] = useState(productData);
 
 
@@ -89,15 +45,14 @@ const Home = ({ navigation }) => {
   }
 
   const filterWithCategory = (idCategory) => {
-    newArrayCategories.forEach(item => {
-      if (item.id === idCategory) {
-        item.isSelectCategory = true;
-      } else {
-        item.isSelectCategory = false;
-      }
-    });
-
-    setNewArrayCategories([...newArrayCategories]);
+    // categories.forEach(item => {
+    //   if (item.id === idCategory) {
+    //     item.isSelectCategory = true;
+    //   } else {
+    //     item.isSelectCategory = false;
+    //   }
+    // });
+    dispatch(updateCategories(idCategory))
 
     dispatch(getProductsByCategoryThunk(idCategory));
   }
@@ -198,9 +153,9 @@ const Home = ({ navigation }) => {
                 style={[styles.itemCategory(lastIndex, index)]}
                 key={item.id}
               >
-                <Image
+                {item.image && <Image
                   source={{ uri: item.image }} style={styles.imageCategory}
-                />
+                />}
                 <Text style={styles.categoryName}>{item.categoryName}</Text>
               </TouchableOpacity>
             )
@@ -218,11 +173,11 @@ const Home = ({ navigation }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
         >
-          {newArrayCategories.map((item, index) => {
-            const lastIndex = newArrayCategories.length - 1
+          {categories.map((item, index) => {
+            const lastIndex = categories.length - 1
             return (
               <TouchableOpacity
-                onPress={() => filterWithCategory(item.id)}
+                onPress={() => filterWithCategory(item.id, categories)}
                 style={[styles.productWithCategory(lastIndex, index), { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
                 key={item.id}
               >
