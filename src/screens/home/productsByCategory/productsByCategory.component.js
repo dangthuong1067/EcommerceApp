@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './productsByCategory.styles';
@@ -9,7 +9,7 @@ const ProductsByCategory = () => {
   const dispatch = useDispatch();
   const categories = useSelector(state => state.home.categories);
   const productsByCategory = useSelector(state => state.home.productsByCategory);
-  console.log('productsByCategory', productsByCategory);
+  const flatListRef = useRef(null);
 
   const getInitData = () => {
     dispatch(getProductsByCategoryThunk());
@@ -22,6 +22,7 @@ const ProductsByCategory = () => {
   const filterWithCategory = (idCategory) => {
     dispatch(updateCategories(idCategory));
     idCategory === -1 ? dispatch(getProductsByCategoryThunk()) : dispatch(getProductsByCategoryThunk(idCategory));
+    flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
   }
 
   return (
@@ -53,6 +54,7 @@ const ProductsByCategory = () => {
 
       <View style={styles.itemWithCategory}>
         <FlatList
+          ref={flatListRef}
           data={productsByCategory}
           renderItem={({ item, index }) => {
             const lastIndex = productsByCategory.length - 1
