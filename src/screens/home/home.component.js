@@ -6,34 +6,22 @@ import styles from './home.styles';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
-import data, { productCategory, productData } from '../../../data';
 import { getBannersThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk, updateCategories } from '../../redux/home/home.slice';
+import ProductsByCategory from './productsByCategory/productsByCategory.component';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const { token } = useSelector(state => state.auth);
-  const { banners } = useSelector(state => state.home);
-  const { products } = useSelector(state => state.home);
-  const { saleProducts } = useSelector(state => state.home);
-  const { popularProducts } = useSelector(state => state.home);
-  const { categories } = useSelector(state => state.home);
-  const { productsByCategory } = useSelector(state => state.home);
-
-
-  const [arrayCategories, setArrayCategories] = useState([])
-  const [productDataFiltered, setProductDataFiltered] = useState(productData);
-
-
-  // useLayoutEffect(() => {
-  //   setNewArrayCategories([...array])
-  // }, [categories])
+  const banners = useSelector(state => state.home.banners);
+  const saleProducts = useSelector(state => state.home.saleProducts);
+  const popularProducts = useSelector(state => state.home.popularProducts);
+  const categories = useSelector(state => state.home.categories);
 
   useEffect(() => {
-    // setNewArrayCategories([...array])
-    getData();
+    getInitData();
   }, [])
 
-  const getData = async () => {
+  const getInitData = async () => {
     await dispatch(getBannersThunk());
     await dispatch(getProductsThunk('sale'));
     await dispatch(getProductsThunk('popular'));
@@ -42,19 +30,6 @@ const Home = ({ navigation }) => {
 
     await dispatch(getProductsThunk('popular'));
 
-  }
-
-  const filterWithCategory = (idCategory) => {
-    // categories.forEach(item => {
-    //   if (item.id === idCategory) {
-    //     item.isSelectCategory = true;
-    //   } else {
-    //     item.isSelectCategory = false;
-    //   }
-    // });
-    dispatch(updateCategories(idCategory))
-
-    dispatch(getProductsByCategoryThunk(idCategory));
   }
 
   return (
@@ -108,7 +83,6 @@ const Home = ({ navigation }) => {
           />
         </View>
 
-
         <View style={styles.preferentialProducts}>
           <Text style={styles.text}>Sản phẩm phổ biến</Text>
           <TouchableOpacity>
@@ -144,67 +118,25 @@ const Home = ({ navigation }) => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-        // style={{ marginHorizontal: 15 }}
         >
-          {categories.map((item, index) => {
-            const lastIndex = categories.length - 1
+          {categories.filter(item => item.id !== -1).map((item, index) => {
+            const lastIndex = categories.filter(item => item.id !== -1).length - 1
             return (
               <TouchableOpacity
                 style={[styles.itemCategory(lastIndex, index)]}
                 key={item.id}
               >
-                {item.image && <Image
+                <Image
                   source={{ uri: item.image }} style={styles.imageCategory}
-                />}
+                />
                 <Text style={styles.categoryName}>{item.categoryName}</Text>
               </TouchableOpacity>
             )
           })}
         </ScrollView>
 
-        <View style={styles.preferentialProducts}>
-          <Text style={styles.text}>Sản phẩm theo danh mục</Text>
-          <TouchableOpacity>
-            <Text style={styles.textSeeAll}>Xem tất cả</Text>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {categories.map((item, index) => {
-            const lastIndex = categories.length - 1
-            return (
-              <TouchableOpacity
-                onPress={() => filterWithCategory(item.id, categories)}
-                style={[styles.productWithCategory(lastIndex, index), { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
-                key={item.id}
-              >
-                <Text style={{ color: item.isSelectCategory ? 'white' : 'black', fontWeight: 500 }}>{item.categoryName}</Text>
-              </TouchableOpacity>
-            )
-          })}
-        </ScrollView>
-
-        <View style={styles.itemWithCategory}>
-          <FlatList
-            data={productsByCategory}
-            renderItem={({ item, index }) => {
-              const lastIndex = productsByCategory.length - 1
-              return (
-                <View style={styles.containerItem(lastIndex, index)}>
-                  <Item
-                    item={item}
-                  />
-                </View>
-              )
-            }
-            }
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
+        <ProductsByCategory
+        />
       </ScrollView >
     </>
   )
