@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { formatCurrency } from '../../helpers/Utils';
 import styles from './item.styles';
 const Item = ({ item }) => {
@@ -36,7 +36,6 @@ const Item = ({ item }) => {
           )}
         </View>
 
-
         <View style={styles.priceAndAddCart}>
           <View>
             <Text style={styles.price}>{formatCurrency(item.items[indexSelected].price)}</Text>
@@ -49,10 +48,14 @@ const Item = ({ item }) => {
         </View>
       </View>
     </View>
-
   )
 }
 
-export default Item
+const isMemo = (prveProps, nextProps) => {
+  if (prveProps.item == nextProps.item) return true;
+  else return false;
+}
+
+export default memo(Item, isMemo);
 
 

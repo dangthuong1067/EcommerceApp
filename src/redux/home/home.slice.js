@@ -6,15 +6,16 @@ import request from '../../helpers/request';
 
 const INIT_STATE = {
   // token: null,
-  // loading: true,
   banners: [],
+  categoriesList: [],
   products: [],
-  categories: [],
   productsByCategory: [],
-
   saleProducts: [],
-  popularProducts: []
-
+  popularProducts: [],
+  productsByCategories: {
+    categories: [],
+    loading: false
+  }
 }
 
 const homeSlice = createSlice({
@@ -23,7 +24,7 @@ const homeSlice = createSlice({
   reducers: {
     updateCategories: (state, action) => {
       const idCategory = action.payload
-      state.categories.forEach(item => {
+      state.productsByCategories.categories.forEach(item => {
         if (item.id === idCategory) {
           item.isSelectCategory = true;
         } else {
@@ -32,6 +33,9 @@ const homeSlice = createSlice({
       });
     },
 
+    loadingProduct: (state, action) => {
+      state.productsByCategories.loading = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -45,16 +49,16 @@ const homeSlice = createSlice({
         } else if (tag === 'popular') {
           state.popularProducts = action.payload.products;
         }
-        // else {
-        //   state.products = action.payload.products
-        // }
-        // state.products = action.payload;
+      })
+      .addCase(getCategoriesListThunk.fulfilled, (state, action) => {
+        state.categoriesList = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getCategoriesThunk.fulfilled, (state, action) => {
-        state.categories = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
+        state.productsByCategories.categories = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
         state.productsByCategory = action.payload;
+        state.productsByCategories.loading = false
       })
   }
 })
@@ -116,6 +120,24 @@ export const getProductsThunk = createAsyncThunk(
   }
 )
 
+export const getCategoriesListThunk = createAsyncThunk(
+  'home/getCategoriesListThunk',
+  async (parameter, thunkAPI) => {
+    const response = await request(
+      '/home/categories',
+      undefined,
+      thunkAPI
+    )
+
+    if (response.ok) {
+      const data = await response.json();
+      const categories = data.data.categories;
+      return categories;
+    }
+    return thunkAPI.rejectWithValue('Can not fetch data');
+  }
+)
+
 export const getProductsByCategoryThunk = createAsyncThunk(
   'home/getProductsByCategoryThunk',
   async (categoryId = '', thunkAPI) => {
@@ -137,4 +159,4 @@ export const getProductsByCategoryThunk = createAsyncThunk(
 )
 
 export default homeSlice.reducer;
-export const { updateCategories } = homeSlice.actions;
+export const { updateCategories, loadingProduct } = homeSlice.actions;

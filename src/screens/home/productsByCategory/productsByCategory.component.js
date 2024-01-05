@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './productsByCategory.styles';
 import Item from '../../item/item.component';
-import { getProductsByCategoryThunk, updateCategories } from '../../../redux/home/home.slice';
+import { getCategoriesThunk, getProductsByCategoryThunk, loadingProduct, updateCategories } from '../../../redux/home/home.slice';
+import ItemCategory from './itemCategory/itemCategory.component';
 
 const ProductsByCategory = () => {
   const dispatch = useDispatch();
-  const categories = useSelector(state => state.home.categories);
+  const { loading, categories } = useSelector(state => state.home.productsByCategories);
   const productsByCategory = useSelector(state => state.home.productsByCategory);
   const flatListRef = useRef(null);
 
   const getInitData = () => {
+    dispatch(getCategoriesThunk());
     dispatch(getProductsByCategoryThunk());
   }
 
@@ -20,9 +22,14 @@ const ProductsByCategory = () => {
   }, [])
 
   const filterWithCategory = (idCategory) => {
+    dispatch(loadingProduct(true));
     dispatch(updateCategories(idCategory));
-    idCategory === -1 ? dispatch(getProductsByCategoryThunk()) : dispatch(getProductsByCategoryThunk(idCategory));
-    flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+    if (idCategory === -1) {
+      dispatch(getProductsByCategoryThunk());
+    } else {
+      dispatch(getProductsByCategoryThunk(idCategory));
+    }
+    flatListRef.current.scrollToOffset({ offset: 0 });
   }
 
   return (
@@ -41,21 +48,28 @@ const ProductsByCategory = () => {
         {categories.map((item, index) => {
           const lastIndex = categories.length - 1
           return (
-            <TouchableOpacity
-              onPress={() => filterWithCategory(item.id, categories)}
-              style={[styles.productWithCategory(lastIndex, index), { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
-              key={item.id}
-            >
-              <Text style={{ color: item.isSelectCategory ? 'white' : 'black', fontWeight: 500 }}>{item.categoryName}</Text>
-            </TouchableOpacity>
+            <ItemCategory
+              item={{
+                item,
+                lastIndex,
+                index,
+                filterWithCategory
+              }}
+            />
           )
         })}
       </ScrollView>
 
       <View style={styles.itemWithCategory}>
+        {loading &&
+          <View style={styles.viewLoading}>
+            <ActivityIndicator size="small" color="#00ff00" />
+          </View>
+        }
         <FlatList
           ref={flatListRef}
           data={productsByCategory}
+          keyExtractor={item => item.id}
           renderItem={({ item, index }) => {
             const lastIndex = productsByCategory.length - 1
             return (
@@ -70,7 +84,8 @@ const ProductsByCategory = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
         />
-      </View></>
+      </View>
+    </>
   )
 }
 

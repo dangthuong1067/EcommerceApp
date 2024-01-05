@@ -6,7 +6,7 @@ import styles from './home.styles';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
-import { getBannersThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk, updateCategories } from '../../redux/home/home.slice';
+import { getBannersThunk, getCategoriesListThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk, updateCategories } from '../../redux/home/home.slice';
 import ProductsByCategory from './productsByCategory/productsByCategory.component';
 
 const Home = ({ navigation }) => {
@@ -15,7 +15,7 @@ const Home = ({ navigation }) => {
   const banners = useSelector(state => state.home.banners);
   const saleProducts = useSelector(state => state.home.saleProducts);
   const popularProducts = useSelector(state => state.home.popularProducts);
-  const categories = useSelector(state => state.home.categories);
+  const categoriesList = useSelector(state => state.home.categoriesList);
 
   useEffect(() => {
     getInitData();
@@ -26,7 +26,7 @@ const Home = ({ navigation }) => {
     await dispatch(getProductsThunk('sale'));
     await dispatch(getProductsThunk('popular'));
 
-    await dispatch(getCategoriesThunk());
+    await dispatch(getCategoriesListThunk());
 
     await dispatch(getProductsThunk('popular'));
 
@@ -119,8 +119,8 @@ const Home = ({ navigation }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
         >
-          {categories.filter(item => item.id !== -1).map((item, index) => {
-            const lastIndex = categories.filter(item => item.id !== -1).length - 1
+          {categoriesList.filter(item => item.id !== -1).map((item, index) => {
+            const lastIndex = categoriesList.filter(item => item.id !== -1).length - 1
             return (
               <TouchableOpacity
                 style={[styles.itemCategory(lastIndex, index)]}

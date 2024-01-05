@@ -53,6 +53,9 @@ const styles = StyleSheet.create({
   itemWithCategory: {
     marginTop: 10,
     marginBottom: 20
+  },
+  viewLoading: {
+    marginBottom: 10
   }
 
 })
