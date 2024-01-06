@@ -8,7 +8,7 @@ import ItemCategory from './itemCategory/itemCategory.component';
 
 const ProductsByCategory = () => {
   const dispatch = useDispatch();
-  const { loading, categories } = useSelector(state => state.home.productsByCategories);
+  const { loading, categories, } = useSelector(state => state.home.productsByCategories);
   const productsByCategory = useSelector(state => state.home.productsByCategory);
   const flatListRef = useRef(null);
 
@@ -32,6 +32,8 @@ const ProductsByCategory = () => {
     flatListRef.current.scrollToOffset({ offset: 0 });
   }
 
+  console.log('render' + Date.now());
+
   return (
     <>
       <View style={styles.preferentialProducts}>
@@ -49,12 +51,11 @@ const ProductsByCategory = () => {
           const lastIndex = categories.length - 1
           return (
             <ItemCategory
-              item={{
-                item,
-                lastIndex,
-                index,
-                filterWithCategory
-              }}
+              key={item.id}
+              item={item}
+              lastIndex={lastIndex}
+              index={index}
+              filterWithCategory={filterWithCategory}
             />
           )
         })}

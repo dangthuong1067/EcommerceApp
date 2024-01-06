@@ -14,7 +14,8 @@ const INIT_STATE = {
   popularProducts: [],
   productsByCategories: {
     categories: [],
-    loading: false
+    loading: false,
+    // productsByCategory: []
   }
 }
 
@@ -57,6 +58,7 @@ const homeSlice = createSlice({
         state.productsByCategories.categories = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
+        // state.productsByCategories.productsByCategory = action.payload;
         state.productsByCategory = action.payload;
         state.productsByCategories.loading = false
       })

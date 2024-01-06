@@ -3,6 +3,7 @@ import React, { memo, useState } from 'react';
 import { formatCurrency } from '../../helpers/Utils';
 import styles from './item.styles';
 const Item = ({ item }) => {
+  console.log('render product item');
   const [indexSelected, setIndexSelected] = useState(0);
   const [discount, setDiscount] = useState('');
 
@@ -52,7 +53,7 @@ const Item = ({ item }) => {
 }
 
 const isMemo = (prveProps, nextProps) => {
-  if (prveProps.item == nextProps.item) return true;
+  if (prveProps.item === nextProps.item) return true;
   else return false;
 }
 
