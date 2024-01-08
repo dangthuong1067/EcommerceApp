@@ -21,16 +21,15 @@ const ProductsByCategory = () => {
   }, [])
 
   const filterWithCategory = (idCategory) => {
-    dispatch(loadingProduct(true));
-    dispatch(updateCategories(idCategory));
-
     const findElement = categories.find(item => item.id === idCategory && item.isSelectCategory)
     if (findElement) {
-      return dispatch(loadingProduct(false));
+      return;
     }
     else {
       dispatch(getProductsByCategoryThunk(idCategory));
     };
+    dispatch(loadingProduct(true));
+    dispatch(updateCategories(idCategory));
 
     flatListRef.current.scrollToOffset({ offset: 0 });
   }
