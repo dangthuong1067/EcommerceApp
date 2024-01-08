@@ -8,8 +8,7 @@ import ItemCategory from './itemCategory/itemCategory.component';
 
 const ProductsByCategory = () => {
   const dispatch = useDispatch();
-  const { loading, categories, } = useSelector(state => state.home.productsByCategories);
-  const productsByCategory = useSelector(state => state.home.productsByCategory);
+  const { loading, categories, productsByCategories } = useSelector(state => state.home.productsByCategories);
   const flatListRef = useRef(null);
 
   const getInitData = () => {
@@ -24,11 +23,15 @@ const ProductsByCategory = () => {
   const filterWithCategory = (idCategory) => {
     dispatch(loadingProduct(true));
     dispatch(updateCategories(idCategory));
-    if (idCategory === -1) {
-      dispatch(getProductsByCategoryThunk());
-    } else {
-      dispatch(getProductsByCategoryThunk(idCategory));
+
+    const findElement = categories.find(item => item.id === idCategory && item.isSelectCategory)
+    if (findElement) {
+      return dispatch(loadingProduct(false));
     }
+    else {
+      dispatch(getProductsByCategoryThunk(idCategory));
+    };
+
     flatListRef.current.scrollToOffset({ offset: 0 });
   }
 
@@ -69,10 +72,10 @@ const ProductsByCategory = () => {
         }
         <FlatList
           ref={flatListRef}
-          data={productsByCategory}
+          data={productsByCategories}
           keyExtractor={item => item.id}
           renderItem={({ item, index }) => {
-            const lastIndex = productsByCategory.length - 1
+            const lastIndex = productsByCategories.length - 1
             return (
               <View style={styles.containerItem(lastIndex, index)}>
                 <Item

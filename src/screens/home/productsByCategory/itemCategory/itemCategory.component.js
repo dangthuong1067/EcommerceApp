@@ -13,7 +13,6 @@ const ItemCategory = ({
     <TouchableOpacity
       onPress={() => filterWithCategory(item.id)}
       style={[styles.productWithCategory(lastIndex, index), { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
-      key={item.id}
     >
       <Text style={styles.categoryText(item.isSelectCategory)}>{item.categoryName}</Text>
     </TouchableOpacity>

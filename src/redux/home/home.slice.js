@@ -9,13 +9,12 @@ const INIT_STATE = {
   banners: [],
   categoriesList: [],
   products: [],
-  productsByCategory: [],
   saleProducts: [],
   popularProducts: [],
   productsByCategories: {
     categories: [],
     loading: false,
-    // productsByCategory: []
+    productsByCategories: []
   }
 }
 
@@ -55,12 +54,11 @@ const homeSlice = createSlice({
         state.categoriesList = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getCategoriesThunk.fulfilled, (state, action) => {
-        state.productsByCategories.categories = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
+        state.productsByCategories.categories = [{ id: '', categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
-        // state.productsByCategories.productsByCategory = action.payload;
-        state.productsByCategory = action.payload;
-        state.productsByCategories.loading = false
+        state.productsByCategories.productsByCategories = action.payload;
+        state.productsByCategories.loading = false;
       })
   }
 })
