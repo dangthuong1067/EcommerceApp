@@ -54,7 +54,8 @@ const homeSlice = createSlice({
         state.categoriesList = [{ id: -1, categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
       })
       .addCase(getCategoriesThunk.fulfilled, (state, action) => {
-        state.productsByCategories.categories = [{ id: '', categoryName: 'TẤT CẢ', isSelectCategory: true }, ...action.payload]
+        const newCategoriesList = action.payload.map(item => ({ ...item, isSelectCategory: false }))
+        state.productsByCategories.categories = [{ id: '', categoryName: 'TẤT CẢ', isSelectCategory: true }, ...newCategoriesList]
       })
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
         state.productsByCategories.productsByCategories = action.payload;
