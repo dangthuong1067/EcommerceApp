@@ -3,7 +3,6 @@ import React, { memo, useState } from 'react';
 import { formatCurrency } from '../../helpers/Utils';
 import styles from './item.styles';
 const Item = ({ item }) => {
-  console.log('render product item');
   const [indexSelected, setIndexSelected] = useState(0);
   const [discount, setDiscount] = useState('');
 

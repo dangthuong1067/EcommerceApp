@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +17,8 @@ import Register from './src/screens/register/register.component';
 import ForgotPassword from './src/screens/forgot-password/forgot-password.component';
 import store from './src/redux/store';
 import { getTokenThunk } from './src/redux/auth/auth.slice';
+import SplashScreen from './src/screens/splash-screen/splashScreen.component';
+import { loadingSpashScreen } from './src/redux/staticData/staticData.slice';
 
 const Stack = createStackNavigator();
 const DrawerStack = createDrawerNavigator();
@@ -101,27 +103,31 @@ const ProtectedStack = () => (
 const Navigation = () => {
   const dispatch = useDispatch();
   const { token, loading } = useSelector(state => state.auth);
+  const { loadingSpash } = useSelector(state => state.staticData);
   const test = null
   let rendering = null;
 
   useEffect(() => {
+    dispatch(loadingSpashScreen(true))
     dispatch(getTokenThunk());
   }, [])
 
-  if (loading) {
-    rendering = <ActivityIndicator />;
-  } else if (token === null) {
+
+  if (loadingSpash && !token) {
+    rendering = <SplashScreen />;
+  } else if (token && loadingSpash) {
     rendering = <AuthStack />;
   }
-  else {
+  else if (loadingSpash == false && token) {
     rendering = <ProtectedStack />;
   }
   return (
     <NavigationContainer>
       {rendering}
     </NavigationContainer>
-  )
-}
+  );
+};
+
 
 export default function App() {
   return (

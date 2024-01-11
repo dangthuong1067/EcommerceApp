@@ -4,12 +4,13 @@ import authReducer from './auth/auth.slice'
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from './user/user.slice'
 import homeReducer from "./home/home.slice";
+import staticSlice from "./staticData/staticData.slice";
 const store = configureStore({
   reducer: {
-    // cart: cartReducer,
     auth: authReducer,
     user: userReducer,
-    home: homeReducer
+    home: homeReducer,
+    staticData: staticSlice
   }
 })
 

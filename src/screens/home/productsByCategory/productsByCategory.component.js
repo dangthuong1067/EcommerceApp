@@ -25,16 +25,12 @@ const ProductsByCategory = () => {
     if (findElement) {
       return;
     }
-    else {
-      dispatch(getProductsByCategoryThunk(idCategory));
-    };
+    dispatch(getProductsByCategoryThunk(idCategory));
     dispatch(loadingProduct(true));
     dispatch(updateCategories(idCategory));
 
     flatListRef.current.scrollToOffset({ offset: 0 });
   }
-
-  console.log('render' + Date.now());
 
   return (
     <>

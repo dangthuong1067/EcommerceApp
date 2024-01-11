@@ -10,27 +10,27 @@ import { getBannersThunk, getCategoriesListThunk, getCategoriesThunk, getProduct
 import ProductsByCategory from './productsByCategory/productsByCategory.component';
 
 const Home = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const { token } = useSelector(state => state.auth);
+  // const dispatch = useDispatch();
+  // const { token } = useSelector(state => state.auth);
   const banners = useSelector(state => state.home.banners);
   const saleProducts = useSelector(state => state.home.saleProducts);
   const popularProducts = useSelector(state => state.home.popularProducts);
   const categoriesList = useSelector(state => state.home.categoriesList);
 
-  useEffect(() => {
-    getInitData();
-  }, [])
+  // useEffect(() => {
+  //   getInitData();
+  // }, [])
 
-  const getInitData = async () => {
-    await dispatch(getBannersThunk());
-    await dispatch(getProductsThunk('sale'));
-    await dispatch(getProductsThunk('popular'));
+  // const getInitData = async () => {
+  //   await dispatch(getBannersThunk());
+  //   await dispatch(getProductsThunk('sale'));
+  //   await dispatch(getProductsThunk('popular'));
 
-    await dispatch(getCategoriesListThunk());
+  //   await dispatch(getCategoriesListThunk());
 
-    await dispatch(getProductsThunk('popular'));
+  //   await dispatch(getProductsThunk('popular'));
 
-  }
+  // }
 
   return (
     <>

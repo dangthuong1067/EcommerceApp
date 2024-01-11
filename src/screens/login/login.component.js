@@ -7,6 +7,7 @@ import styles from './login.styles';
 import TextInputField from '../../components/textinput-field/textinput-field.component';
 import PrimaryButton from '../../components/primary-button/primary-button.component';
 import { loginThunk } from '../../redux/auth/auth.slice';
+import { loadingSpashScreen } from '../../redux/staticData/staticData.slice';
 
 const Login = ({ navigation }) => {
   const {
@@ -26,6 +27,7 @@ const Login = ({ navigation }) => {
   const onSubmit = async (data) => {
     try {
       await dispatch(loginThunk(data)).unwrap();
+      dispatch(loadingSpashScreen(false))
       Alert.alert("Đăng nhập thành công");
     } catch (error) {
       Alert.alert(error);

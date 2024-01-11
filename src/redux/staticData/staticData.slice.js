@@ -5,28 +5,29 @@ import {
 } from '@reduxjs/toolkit'
 
 const INIT_STATE = {
-  token: null,
-  // loading: true,
-  status: "success"
+  loadingSpash: true,
+
 }
 
-const authSlice = createSlice({
-  name: 'auth',
+const staticSlice = createSlice({
+  name: 'static',
   initialState: INIT_STATE,
-  reducers: {},
+  reducers: {
+    loadingSpashScreen: (state, action) => {
+      state.loadingSpash = action.payload
+
+    },
+
+  },
+
   extraReducers: builder => {
     builder
-      .addCase(getTokenThunk.fulfilled, (state, action) => {
-        state.token = action.payload;
-        // state.loading = false;
+      .addCase(logoutThunk.fulfilled, (state, action) => {
+        state.loadingSpash = false;
       })
-      .addCase(loginThunk.fulfilled, (state, action) => {
-        state.token = action.payload;
-      })
-      .addCase(logoutThunk.fulfilled, (state) => {
-        state.token = null;
-      })
+
   }
+
 })
 
 export const getTokenThunk = createAsyncThunk(
@@ -97,4 +98,6 @@ export const logoutThunk = createAsyncThunk(
     await AsyncStorage.removeItem('token');
   }
 )
-export default authSlice.reducer
+export default staticSlice.reducer
+
+export const { loadingSpashScreen } = staticSlice.actions;

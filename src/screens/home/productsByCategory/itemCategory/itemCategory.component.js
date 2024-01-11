@@ -8,7 +8,6 @@ const ItemCategory = ({
   index,
   filterWithCategory
 }) => {
-  console.log('render ItemCategory');
   return (
     <TouchableOpacity
       onPress={() => filterWithCategory(item.id)}
