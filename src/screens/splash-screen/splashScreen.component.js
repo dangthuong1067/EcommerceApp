@@ -6,19 +6,23 @@ import { getBannersThunk, getCategoriesListThunk, getProductsThunk } from '../..
 import { useDispatch, useSelector } from 'react-redux'
 import { getTokenThunk } from '../../redux/auth/auth.slice'
 import { loadingSpashScreen } from '../../redux/staticData/staticData.slice'
+import { setStack } from '../../redux/app/app.slice'
 
 const SplashScreen = () => {
   const dispatch = useDispatch();
   const { token } = useSelector(state => state.auth);
   useEffect(() => {
     if (!token) {
-      return;
+      dispatch(setStack("auth"))
+      // return;
     }
     else {
-      async () => {
-        await getInitData();
-      }
-      dispatch(loadingSpashScreen(false))
+      // async () => {
+      //   await getInitData();
+      // }
+      getInitData()
+      dispatch(setStack("protected"))
+
     }
   }, [])
 

@@ -19,6 +19,7 @@ import store from './src/redux/store';
 import { getTokenThunk } from './src/redux/auth/auth.slice';
 import SplashScreen from './src/screens/splash-screen/splashScreen.component';
 import { loadingSpashScreen } from './src/redux/staticData/staticData.slice';
+import { setStack } from './src/redux/app/app.slice';
 
 const Stack = createStackNavigator();
 const DrawerStack = createDrawerNavigator();
@@ -105,21 +106,30 @@ const Navigation = () => {
   const { token, loading } = useSelector(state => state.auth);
   const { loadingSpash } = useSelector(state => state.staticData);
   const test = null
+
+  const { stack } = useSelector(state => state.app);
+  console.log('stack', stack);
   let rendering = null;
 
   useEffect(() => {
-    dispatch(loadingSpashScreen(true))
+    if (stack == undefined) dispatch(setStack('init'))
     dispatch(getTokenThunk());
   }, [])
 
 
-  if (loadingSpash && !token) {
-    rendering = <SplashScreen />;
-  } else if (token && loadingSpash) {
-    rendering = <AuthStack />;
-  }
-  else if (loadingSpash == false && token) {
-    rendering = <ProtectedStack />;
+  switch (stack) {
+    case 'init':
+      rendering = <SplashScreen />
+      break;
+    case 'auth':
+      rendering = <AuthStack />
+      break;
+    case 'protected':
+      rendering = <ProtectedStack />
+      break;
+    default:
+      rendering = null;
+      break;
   }
   return (
     <NavigationContainer>

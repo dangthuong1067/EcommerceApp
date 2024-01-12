@@ -5,12 +5,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from './user/user.slice'
 import homeReducer from "./home/home.slice";
 import staticSlice from "./staticData/staticData.slice";
+import appReducer from "./app/app.slice";
 const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
     home: homeReducer,
-    staticData: staticSlice
+    staticData: staticSlice,
+    app: appReducer
   }
 })
 
