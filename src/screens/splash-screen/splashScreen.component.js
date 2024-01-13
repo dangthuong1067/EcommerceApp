@@ -11,21 +11,16 @@ import { setStack } from '../../redux/app/app.slice'
 const SplashScreen = () => {
   const dispatch = useDispatch();
   const { token } = useSelector(state => state.auth);
+  console.log('token', token);
   useEffect(() => {
     if (!token) {
-      dispatch(setStack("auth"))
-      // return;
-    }
-    else {
-      // async () => {
-      //   await getInitData();
-      // }
+      setTimeout(() => {
+        dispatch(setStack("auth"))
+      }, 2000);
+    } else {
       getInitData()
-      dispatch(setStack("protected"))
-
     }
   }, [])
-
 
   const getInitData = async () => {
     await dispatch(getBannersThunk());

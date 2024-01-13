@@ -19,7 +19,7 @@ import store from './src/redux/store';
 import { getTokenThunk } from './src/redux/auth/auth.slice';
 import SplashScreen from './src/screens/splash-screen/splashScreen.component';
 import { loadingSpashScreen } from './src/redux/staticData/staticData.slice';
-import { setStack } from './src/redux/app/app.slice';
+import { getStack, setStack } from './src/redux/app/app.slice';
 
 const Stack = createStackNavigator();
 const DrawerStack = createDrawerNavigator();
@@ -112,7 +112,7 @@ const Navigation = () => {
   let rendering = null;
 
   useEffect(() => {
-    if (stack == undefined) dispatch(setStack('init'))
+    dispatch(getStack())
     dispatch(getTokenThunk());
   }, [])
 
