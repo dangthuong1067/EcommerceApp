@@ -16,10 +16,7 @@ import Login from './src/screens/login/login.component';
 import Register from './src/screens/register/register.component';
 import ForgotPassword from './src/screens/forgot-password/forgot-password.component';
 import store from './src/redux/store';
-import { getTokenThunk } from './src/redux/auth/auth.slice';
 import SplashScreen from './src/screens/splash-screen/splashScreen.component';
-import { loadingSpashScreen } from './src/redux/staticData/staticData.slice';
-import { getStack, setStack } from './src/redux/app/app.slice';
 
 const Stack = createStackNavigator();
 const DrawerStack = createDrawerNavigator();
@@ -29,7 +26,6 @@ function AppDrawerStack() {
   return (
     <DrawerStack.Navigator
       screenOptions={{ headerShown: false, swipeEnabled: false }}
-
       drawerContent={props => <DrawerView {...props} />}>
       <DrawerStack.Screen name='AppBottomStack' component={AppBottomStack} />
     </DrawerStack.Navigator>
@@ -102,20 +98,10 @@ const ProtectedStack = () => (
 )
 
 const Navigation = () => {
-  const dispatch = useDispatch();
-  const { token, loading } = useSelector(state => state.auth);
-  const { loadingSpash } = useSelector(state => state.staticData);
   const test = null
-
   const { stack } = useSelector(state => state.app);
   console.log('stack', stack);
   let rendering = null;
-
-  useEffect(() => {
-    dispatch(getStack())
-    dispatch(getTokenThunk());
-  }, [])
-
 
   switch (stack) {
     case 'init':
@@ -137,7 +123,6 @@ const Navigation = () => {
     </NavigationContainer>
   );
 };
-
 
 export default function App() {
   return (

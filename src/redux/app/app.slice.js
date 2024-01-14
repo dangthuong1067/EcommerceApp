@@ -10,15 +10,9 @@ const appSlice = createSlice({
   reducers: {
     setStack: (state, action) => {
       state.stack = action.payload
-      async () => await AsyncStorage.setItem('stack', state.stack);
     },
-
-    getStack: (state, action) => {
-      async () => await AsyncStorage.getItem('stack')
-    }
-
   }
 })
 
 export default appSlice.reducer;
-export const { setStack, getStack } = appSlice.actions;
+export const { setStack } = appSlice.actions;

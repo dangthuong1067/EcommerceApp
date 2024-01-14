@@ -5,32 +5,32 @@ import styles from './splashScreen.styles'
 import { getBannersThunk, getCategoriesListThunk, getProductsThunk } from '../../redux/home/home.slice'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTokenThunk } from '../../redux/auth/auth.slice'
-import { loadingSpashScreen } from '../../redux/staticData/staticData.slice'
 import { setStack } from '../../redux/app/app.slice'
 
 const SplashScreen = () => {
   const dispatch = useDispatch();
-  const { token } = useSelector(state => state.auth);
-  console.log('token', token);
+  // const { token } = useSelector(state => state.auth);
+  //console.log('token', token);
   useEffect(() => {
-    if (!token) {
-      setTimeout(() => {
-        dispatch(setStack("auth"))
-      }, 2000);
-    } else {
-      getInitData()
-    }
+    handleInitialLogic()
   }, [])
 
-  const getInitData = async () => {
-    await dispatch(getBannersThunk());
-    await dispatch(getProductsThunk('sale'));
-    await dispatch(getProductsThunk('popular'));
+  const handleInitialLogic = async () => {
+    const token = await dispatch(getTokenThunk()).unwrap();
+    console.log('token handleInitialLogic', token);
+    if (token) {
+      await dispatch(getBannersThunk());
+      await dispatch(getProductsThunk('sale'));
+      await dispatch(getProductsThunk('popular'));
 
-    await dispatch(getCategoriesListThunk());
+      await dispatch(getCategoriesListThunk());
 
-    await dispatch(getProductsThunk('popular'));
-
+      await dispatch(getProductsThunk('popular'));
+      dispatch(setStack("protected"));
+    }
+    else {
+      dispatch(setStack("auth"));
+    }
   }
   return (
     <View style={styles.containerImage}>
