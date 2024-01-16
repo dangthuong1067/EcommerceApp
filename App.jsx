@@ -100,7 +100,6 @@ const ProtectedStack = () => (
 const Navigation = () => {
   const test = null
   const { stack } = useSelector(state => state.app);
-  console.log('stack', stack);
   let rendering = null;
 
   switch (stack) {

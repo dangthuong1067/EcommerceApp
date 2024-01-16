@@ -6,6 +6,7 @@ import { getBannersThunk, getCategoriesListThunk, getProductsThunk } from '../..
 import { useDispatch, useSelector } from 'react-redux'
 import { getTokenThunk } from '../../redux/auth/auth.slice'
 import { setStack } from '../../redux/app/app.slice'
+import { getStaticDataThunk } from '../../redux/staticData/staticData.slice'
 
 const SplashScreen = () => {
   const dispatch = useDispatch();
@@ -25,13 +26,15 @@ const SplashScreen = () => {
 
       await dispatch(getCategoriesListThunk());
 
-      await dispatch(getProductsThunk('popular'));
       dispatch(setStack("protected"));
+
+      dispatch(getStaticDataThunk());
     }
     else {
       dispatch(setStack("auth"));
     }
   }
+
   return (
     <View style={styles.containerImage}>
       <Image source={IMAGES.logo}

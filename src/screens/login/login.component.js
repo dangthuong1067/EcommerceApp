@@ -30,7 +30,8 @@ const Login = ({ navigation }) => {
     try {
       await dispatch(loginThunk(data)).unwrap();
       Alert.alert("Đăng nhập thành công");
-      dispatch(setStack("protected"))
+      //dispatch(setStack("protected"))
+      dispatch(setStack("init"));
     } catch (error) {
       Alert.alert('Error:', error.message)
     }

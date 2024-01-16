@@ -3,9 +3,13 @@ import {
   createSlice,
   createAsyncThunk
 } from '@reduxjs/toolkit'
+import request from '../../helpers/request'
 
 const INIT_STATE = {
-  loadingSpash: true,
+  banners: [],
+  saleProducts: [],
+  popularProducts: [],
+  categoriesList: []
 
 }
 
@@ -13,91 +17,73 @@ const staticSlice = createSlice({
   name: 'static',
   initialState: INIT_STATE,
   reducers: {
-    loadingSpashScreen: (state, action) => {
-      state.loadingSpash = action.payload
-
-    },
 
   },
 
   extraReducers: builder => {
     builder
-      .addCase(logoutThunk.fulfilled, (state, action) => {
-        state.loadingSpash = false;
+      .addCase(getStaticDataThunk.fulfilled, (state, action) => {
+        state.banners = action.payload
       })
 
   }
 
 })
 
-export const getTokenThunk = createAsyncThunk(
-  'auth/getTokenThunk',
-  async () => await AsyncStorage.getItem('token')
-)
-
-export const loginThunk = createAsyncThunk(
-  'auth/loginThunk',
-  async (data, thunkAPI) => {
-    const { email, password } = data;
-    const response = await fetch(
-      `${process.env.API_URL}/auth/login`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      }
-    )
-    if (!response.ok) {
-      return thunkAPI.rejectWithValue('Bạn nhập sai email hoặc mật khẩu. Vui lòng nhập lại!');
-    }
-
-    const { data: { token } } = await response.json();
-    await AsyncStorage.setItem('token', token);
-    return token
-  }
-)
-
-
-export const signupThunk = createAsyncThunk(
-  'auth/signupThunk',
-  async (data, thunkAPI) => {
-    const { username, email, password, confirmPassword, role } = data;
-    const response = await fetch(
-      `${process.env.API_URL}/auth/signup`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-          confirmPassword,
-          role
-        })
-      }
+export const getStaticDataThunk = createAsyncThunk(
+  'home/getStaticDataThunk',
+  async (parameter, thunkAPI) => {
+    const responseBanner = request(
+      '/home/banners',
+      undefined,
+      thunkAPI
     )
 
-    if (!response.ok) {
-      const { message } = await response.json();
-      if (message === "Duplicate Email. Please try again") {
-        return thunkAPI.rejectWithValue("Email này đã được dùng. Vui lòng tạo email khác!");
+    console.log('responseBanner', responseBanner);
+
+    const responseSaleProducts = request(
+      '/home/products',
+      {
+        query: { tag: 'sale' }
+      },
+      thunkAPI
+    )
+
+    const responsePoPularProducts = request(
+      '/home/products',
+      {
+        query: { tag: 'popular' }
+      },
+      thunkAPI
+    )
+
+    const responseCategoriesList = request(
+      '/home/categories',
+      undefined,
+      thunkAPI
+    )
+
+    const responseAll = await Promise.all([responseBanner, responseSaleProducts, responsePoPularProducts, responseCategoriesList])
+    console.log('responseAll', responseAll);
+
+    const processResponseAll = async () => {
+      for (const response of responseAll) {
+        console.log('response', response);
+
+        // const { data: { banners } } = response.json();
+        const { data: { categories } } = await response.json();
+        console.log('data categories', categories);
+        // console.log('data banners', banners);
+
       }
     }
+    await processResponseAll()
+    // const result = await processResponseAll()
+    // console.log('result', result);
+    // if (result) return result
+    // return thunkAPI.rejectWithValue('Can not fetch data');
   }
 )
-export const logoutThunk = createAsyncThunk(
-  'auth/logoutThunk',
-  async () => {
-    await AsyncStorage.removeItem('token');
-  }
-)
+
+
 export default staticSlice.reducer
-
-export const { loadingSpashScreen } = staticSlice.actions;

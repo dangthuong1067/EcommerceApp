@@ -12,7 +12,9 @@ import ProductsByCategory from './productsByCategory/productsByCategory.componen
 const Home = ({ navigation }) => {
   // const dispatch = useDispatch();
   // const { token } = useSelector(state => state.auth);
-  const banners = useSelector(state => state.home.banners);
+  // const banners = useSelector(state => state.home.banners);
+  // const { banners } = useSelector(state => state.staticData);
+
   const saleProducts = useSelector(state => state.home.saleProducts);
   const popularProducts = useSelector(state => state.home.popularProducts);
   const categoriesList = useSelector(state => state.home.categoriesList);
@@ -28,7 +30,6 @@ const Home = ({ navigation }) => {
 
   //   await dispatch(getCategoriesListThunk());
 
-  //   await dispatch(getProductsThunk('popular'));
 
   // }
 
@@ -54,9 +55,9 @@ const Home = ({ navigation }) => {
         style={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.carousel}>
+        {/* <View style={styles.carousel}>
           <Carousel data={banners} />
-        </View>
+        </View> */}
 
         <View style={styles.preferentialProducts}>
           <Text style={styles.text}>Sản phẩm ưu đãi</Text>
