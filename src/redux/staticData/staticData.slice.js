@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   createSlice,
   createAsyncThunk
@@ -10,24 +9,20 @@ const INIT_STATE = {
   saleProducts: [],
   popularProducts: [],
   categoriesList: []
-
 }
 
 const staticSlice = createSlice({
   name: 'static',
   initialState: INIT_STATE,
-  reducers: {
-
-  },
-
   extraReducers: builder => {
     builder
       .addCase(getStaticDataThunk.fulfilled, (state, action) => {
-        state.banners = action.payload
+        state.banners = action.payload.banners,
+          state.saleProducts = action.payload.saleProducts,
+          state.popularProducts = action.payload.popularProduct,
+          state.categoriesList = action.payload.categories
       })
-
   }
-
 })
 
 export const getStaticDataThunk = createAsyncThunk(
@@ -38,8 +33,6 @@ export const getStaticDataThunk = createAsyncThunk(
       undefined,
       thunkAPI
     )
-
-    console.log('responseBanner', responseBanner);
 
     const responseSaleProducts = request(
       '/home/products',
@@ -64,26 +57,27 @@ export const getStaticDataThunk = createAsyncThunk(
     )
 
     const responseAll = await Promise.all([responseBanner, responseSaleProducts, responsePoPularProducts, responseCategoriesList])
-    console.log('responseAll', responseAll);
 
     const processResponseAll = async () => {
-      for (const response of responseAll) {
-        console.log('response', response);
+      for (let index = 0; index < responseAll.length; index++) {
+        const { data: { banners } } = await responseAll[0].json();
+        const { data: { products: saleProducts } } = await responseAll[1].json();
+        const { data: { products: popularProduct } } = await responseAll[2].json();
+        const { data: { categories } } = await responseAll[3].json();
 
-        // const { data: { banners } } = response.json();
-        const { data: { categories } } = await response.json();
-        console.log('data categories', categories);
-        // console.log('data banners', banners);
-
+        return {
+          banners,
+          saleProducts,
+          popularProduct,
+          categories
+        }
       }
     }
-    await processResponseAll()
-    // const result = await processResponseAll()
-    // console.log('result', result);
-    // if (result) return result
-    // return thunkAPI.rejectWithValue('Can not fetch data');
+
+    const result = await processResponseAll();
+    if (result) return result
+    return thunkAPI.rejectWithValue('Can not fetch data');
   }
 )
-
 
 export default staticSlice.reducer

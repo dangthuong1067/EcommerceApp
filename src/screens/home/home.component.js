@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, FlatList } from 'react-native'
+import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, FlatList, RefreshControl } from 'react-native'
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Carousel from '../../components/carousel/Carousel';
@@ -8,30 +8,27 @@ import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
 import { getBannersThunk, getCategoriesListThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk, updateCategories } from '../../redux/home/home.slice';
 import ProductsByCategory from './productsByCategory/productsByCategory.component';
+import { getStaticDataThunk } from '../../redux/staticData/staticData.slice';
 
 const Home = ({ navigation }) => {
   // const dispatch = useDispatch();
-  // const { token } = useSelector(state => state.auth);
-  // const banners = useSelector(state => state.home.banners);
-  // const { banners } = useSelector(state => state.staticData);
-
-  const saleProducts = useSelector(state => state.home.saleProducts);
-  const popularProducts = useSelector(state => state.home.popularProducts);
-  const categoriesList = useSelector(state => state.home.categoriesList);
+  const [refreshing, setRefreshing] = useState(false);
+  const { banners, saleProducts, popularProducts, categoriesList } = useSelector(state => state.staticData);
 
   // useEffect(() => {
   //   getInitData();
   // }, [])
 
   // const getInitData = async () => {
-  //   await dispatch(getBannersThunk());
-  //   await dispatch(getProductsThunk('sale'));
-  //   await dispatch(getProductsThunk('popular'));
-
-  //   await dispatch(getCategoriesListThunk());
-
-
+  // dispatch(getStaticDataThunk());
   // }
+
+  // const onRefresh = async () => {
+  //   setRefreshing(true);
+  // getInitData()
+  //   setRefreshing(false);
+  // };
+
 
   return (
     <>
@@ -54,10 +51,16 @@ const Home = ({ navigation }) => {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
+      // refreshControl={
+      //   <RefreshControl
+      //     refreshing={refreshing}
+      //     onRefresh={onRefresh}
+      //   />
+      // }
       >
-        {/* <View style={styles.carousel}>
+        <View style={styles.carousel}>
           <Carousel data={banners} />
-        </View> */}
+        </View>
 
         <View style={styles.preferentialProducts}>
           <Text style={styles.text}>Sản phẩm ưu đãi</Text>
