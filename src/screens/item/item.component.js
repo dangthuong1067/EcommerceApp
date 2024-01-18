@@ -4,7 +4,6 @@ import { formatCurrency } from '../../helpers/Utils';
 import styles from './item.styles';
 const Item = ({ item }) => {
   const [indexSelected, setIndexSelected] = useState(0);
-  const [discount, setDiscount] = useState('');
 
   const discountFunction = (price, reducedPrice) => {
     const discount = ((price - reducedPrice) / price) * 100;
@@ -13,16 +12,16 @@ const Item = ({ item }) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: item.items[indexSelected].image }} style={styles.image} resizeMode="contain" />
-      <View style={styles.discount}>
-        <Text style={styles.textDiscount}><Text style={styles.percent}>{discount}%</Text> GIẢM GIÁ</Text>
-      </View>
+      {item.items[indexSelected].reducedPrice &&
+        <View style={styles.discount}>
+          <Text style={styles.textDiscount}><Text style={styles.percent}>{parseInt(discountFunction(item.items[indexSelected].price, item.items[indexSelected].reducedPrice))}%</Text> GIẢM GIÁ</Text>
+        </View>
+      }
 
       <View style={styles.content}>
         <Text numberOfLines={1} style={styles.productName}>{item.name}</Text>
         <View style={styles.containerCapacity}>
           {item.items.map((item, index) => {
-            const discount = discountFunction(item.price, item.reducedPrice);
-            setDiscount(discount)
             return (
               <TouchableOpacity
                 onPress={() => setIndexSelected(index)}
@@ -38,7 +37,7 @@ const Item = ({ item }) => {
 
         <View style={styles.priceAndAddCart}>
           <View>
-            <Text style={styles.price}>{formatCurrency(item.items[indexSelected].price)}</Text>
+            <Text style={item.items[indexSelected].reducedPrice ? styles.price : styles.priceWithOutreducedPrice}>{formatCurrency(item.items[indexSelected].price)}</Text>
             <Text style={styles.reducedPrice}>{formatCurrency(item.items[indexSelected].reducedPrice)}</Text>
           </View>
 

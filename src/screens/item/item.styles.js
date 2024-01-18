@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: 'grey',
     marginLeft: 15,
-    width: 250
+    // width: 250
   },
   discount: {
     width: 50,
@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
     textDecorationLine: 'line-through'
+  },
+  priceWithOutreducedPrice: {
+    fontSize: 18,
+    color: 'black',
   },
   reducedPrice: {
     fontWeight: 'bold',
