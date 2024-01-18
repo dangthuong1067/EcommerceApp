@@ -6,29 +6,19 @@ import styles from './home.styles';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
-import { getBannersThunk, getCategoriesListThunk, getCategoriesThunk, getProductsByCategoryThunk, getProductsThunk, updateCategories } from '../../redux/home/home.slice';
 import ProductsByCategory from './productsByCategory/productsByCategory.component';
 import { getStaticDataThunk } from '../../redux/staticData/staticData.slice';
 
 const Home = ({ navigation }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   const { banners, saleProducts, popularProducts, categoriesList } = useSelector(state => state.staticData);
 
-  // useEffect(() => {
-  //   getInitData();
-  // }, [])
-
-  // const getInitData = async () => {
-  // dispatch(getStaticDataThunk());
-  // }
-
-  // const onRefresh = async () => {
-  //   setRefreshing(true);
-  // getInitData()
-  //   setRefreshing(false);
-  // };
-
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await dispatch(getStaticDataThunk());
+    setRefreshing(false);
+  };
 
   return (
     <>
@@ -51,12 +41,12 @@ const Home = ({ navigation }) => {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-      // refreshControl={
-      //   <RefreshControl
-      //     refreshing={refreshing}
-      //     onRefresh={onRefresh}
-      //   />
-      // }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
         <View style={styles.carousel}>
           <Carousel data={banners} />
@@ -140,6 +130,7 @@ const Home = ({ navigation }) => {
         </ScrollView>
 
         <ProductsByCategory
+          refreshing={refreshing}
         />
       </ScrollView >
     </>

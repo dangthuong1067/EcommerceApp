@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './productsByCategory.styles';
 import Item from '../../item/item.component';
 import { getCategoriesThunk, getProductsByCategoryThunk, loadingProduct, updateCategories } from '../../../redux/home/home.slice';
 import ItemCategory from './itemCategory/itemCategory.component';
 
-const ProductsByCategory = () => {
+const ProductsByCategory = ({ refreshing }) => {
   const dispatch = useDispatch();
   const { loading, categories, productsByCategories } = useSelector(state => state.home.productsByCategories);
   const flatListRef = useRef(null);
@@ -19,6 +19,10 @@ const ProductsByCategory = () => {
   useEffect(() => {
     getInitData();
   }, [])
+
+  const onRefresh = () => {
+    getInitData();
+  }
 
   const filterWithCategory = (idCategory) => {
     const findElement = categories.find(item => item.id === idCategory && item.isSelectCategory)
@@ -44,6 +48,12 @@ const ProductsByCategory = () => {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
         {categories.map((item, index) => {
           const lastIndex = categories.length - 1

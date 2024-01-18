@@ -18,7 +18,7 @@ const Item = ({ item }) => {
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.productName}>{item.name}</Text>
+        <Text numberOfLines={1} style={styles.productName}>{item.name}</Text>
         <View style={styles.containerCapacity}>
           {item.items.map((item, index) => {
             const discount = discountFunction(item.price, item.reducedPrice);

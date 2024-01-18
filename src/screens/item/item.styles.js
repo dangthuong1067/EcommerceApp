@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: 'grey',
-    marginLeft: 15
+    marginLeft: 15,
+    width: 250
   },
   discount: {
     width: 50,

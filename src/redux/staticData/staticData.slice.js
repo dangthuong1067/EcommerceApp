@@ -59,18 +59,16 @@ export const getStaticDataThunk = createAsyncThunk(
     const responseAll = await Promise.all([responseBanner, responseSaleProducts, responsePoPularProducts, responseCategoriesList])
 
     const processResponseAll = async () => {
-      for (let index = 0; index < responseAll.length; index++) {
-        const { data: { banners } } = await responseAll[0].json();
-        const { data: { products: saleProducts } } = await responseAll[1].json();
-        const { data: { products: popularProduct } } = await responseAll[2].json();
-        const { data: { categories } } = await responseAll[3].json();
+      const { data: { banners } } = await responseAll[0].json();
+      const { data: { products: saleProducts } } = await responseAll[1].json();
+      const { data: { products: popularProduct } } = await responseAll[2].json();
+      const { data: { categories } } = await responseAll[3].json();
 
-        return {
-          banners,
-          saleProducts,
-          popularProduct,
-          categories
-        }
+      return {
+        banners,
+        saleProducts,
+        popularProduct,
+        categories
       }
     }
 
