@@ -22,7 +22,7 @@ const Item = ({ item }) => {
         <View style={styles.containerCapacity}>
           {item.items.map((item, index) => {
             const discount = discountFunction(item.price, item.reducedPrice);
-            // setDiscount(discount)
+            setDiscount(discount)
             return (
               <TouchableOpacity
                 onPress={() => setIndexSelected(index)}
