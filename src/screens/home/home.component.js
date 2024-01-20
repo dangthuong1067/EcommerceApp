@@ -1,5 +1,5 @@
-import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, FlatList, RefreshControl } from 'react-native'
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
+import { View, Text, ScrollView, TouchableOpacity, Image, FlatList, RefreshControl } from 'react-native'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Carousel from '../../components/carousel/Carousel';
 import styles from './home.styles';
@@ -8,6 +8,7 @@ import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
 import ProductsByCategory from './productsByCategory/productsByCategory.component';
 import { getStaticDataThunk } from '../../redux/staticData/staticData.slice';
+import { getCategoriesThunk } from '../../redux/home/home.slice';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Home = ({ navigation }) => {
   const onRefresh = async () => {
     setRefreshing(true);
     await dispatch(getStaticDataThunk());
+    await dispatch(getCategoriesThunk());
     setRefreshing(false);
   };
 
@@ -129,9 +131,7 @@ const Home = ({ navigation }) => {
           })}
         </ScrollView>
 
-        <ProductsByCategory
-          refreshing={refreshing}
-        />
+        <ProductsByCategory />
       </ScrollView >
     </>
   )
