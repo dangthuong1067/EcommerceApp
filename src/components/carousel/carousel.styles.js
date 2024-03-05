@@ -17,8 +17,9 @@ const styles = StyleSheet.create({
   image: (screenWidth) => (
     {
       width: screenWidth,
+      // width: '100%',
       height: 170,
-      resizeMode: 'contain'
+      resizeMode: 'cover'
     }),
   itemDotButton: (index, activeIndex) => ({
     width: 8,

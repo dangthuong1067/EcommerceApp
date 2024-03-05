@@ -48,7 +48,18 @@ const styles = StyleSheet.create({
   containerError: {
     marginBottom: 5
   },
-
+  alreadyHaveAnAcount: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 40
+  },
+  textLogin: {
+    color: "#00CC33",
+    fontSize: 18,
+    marginLeft: 5
+  }
 })
 
 export default styles

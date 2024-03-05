@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, ScrollView, Alert } from 'react-native'
+import { View, Text, Image, KeyboardAvoidingView, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 
 import styles from './register.styles'
@@ -31,7 +31,7 @@ const Register = ({ navigation }) => {
     try {
       await dispatch(signupThunk(data)).unwrap()
       navigation.navigate("Login");
-
+      Alert.alert("Đăng ký thành công");
     } catch (error) {
       Alert.alert(error);
     }
@@ -53,35 +53,6 @@ const Register = ({ navigation }) => {
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <View style={styles.containerTextInputField(errors.username)}>
-                <TextInputField
-                  label="Tên đăng nhập"
-                  iconLeft="person-outline"
-                  placeholder="Tên đăng nhập"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              </View>
-            )}
-            name="username"
-            rules={{
-              required: 'Tên đăng nhập không được bỏ trống',
-              minLength: {
-                value: 3,
-                message: 'Tên đăng nhập phải có ít nhất 3 ký tự',
-              },
-            }}
-          />
-          {errors.username &&
-            <View style={styles.containerError}>
-              <Text style={styles.errorText}>{errors.username.message}</Text>
-            </View>
-          }
-
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
               <View style={styles.containerTextInputField(errors.email)}>
                 <TextInputField
                   label="Email"
@@ -90,6 +61,7 @@ const Register = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                 />
               </View>
             )}
@@ -120,6 +92,7 @@ const Register = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                 />
               </View>
             )}
@@ -213,6 +186,12 @@ const Register = ({ navigation }) => {
           >
             Đăng ký
           </PrimaryButton>
+          <View style={styles.alreadyHaveAnAcount}>
+            <Text style={styles.text}>Bạn đã có tài khoản?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.textLogin}>Đăng nhập</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>

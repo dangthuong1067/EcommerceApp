@@ -1,5 +1,5 @@
 export function formatCurrency(amount) {
-  const formattedAmount = amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  const formattedAmount = amount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
-  return formattedAmount.trim();
+  return formattedAmount?.trim();
 }

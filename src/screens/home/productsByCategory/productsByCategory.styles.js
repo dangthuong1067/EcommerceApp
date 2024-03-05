@@ -1,30 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 10,
-  },
-  textHome: {
-    textAlign: 'center',
-    fontSize: 25,
-    fontWeight: '500',
-    color: 'black',
-    paddingBottom: 10
-  },
-  searchAndDrawer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15
-  },
-  drawer: {
-    marginLeft: 15
-  },
-  carousel: {
-    paddingTop: 10,
-    paddingHorizontal: 15
-  },
   containerItem: (lastIndex, index) => ({
     marginRight: lastIndex === index ? 15 : 0
   }),
@@ -77,6 +53,9 @@ const styles = StyleSheet.create({
   itemWithCategory: {
     marginTop: 10,
     marginBottom: 20
+  },
+  viewLoading: {
+    marginBottom: 10
   }
 
 })

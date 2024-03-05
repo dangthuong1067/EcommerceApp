@@ -39,6 +39,7 @@ const TextInputField = ({
             onBlur={onBlur}
             onChangeText={onChangeText}
             value={value}
+            autoCapitalize="none"
           />
         </View>
         {secure &&
