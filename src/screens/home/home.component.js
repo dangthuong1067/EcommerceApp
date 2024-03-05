@@ -1,30 +1,26 @@
-import { View, Text, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, FlatList } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, ScrollView, TouchableOpacity, Image, FlatList, RefreshControl } from 'react-native'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import Carousel from '../../components/carousel/Carousel';
 import styles from './home.styles';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Item from '../item/item.component';
 import Search from '../../components/search/search.component';
-import data, { productCategory, productData } from '../../../data';
+import ProductsByCategory from './productsByCategory/productsByCategory.component';
+import { getStaticDataThunk } from '../../redux/staticData/staticData.slice';
+import { getCategoriesThunk } from '../../redux/home/home.slice';
 
 const Home = ({ navigation }) => {
-  const [newProductCategory, setNewProductCategory] = useState(productCategory)
-  const [productDataFiltered, setProductDataFiltered] = useState(productData)
+  const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
+  const { banners, saleProducts, popularProducts, categoriesList } = useSelector(state => state.staticData);
 
-  const filterWithCategory = (idCategory) => {
-    productCategory.forEach(item => {
-      if (item.id === idCategory) item.isSelectCategory = true
-      else item.isSelectCategory = false
-    });
-
-    setNewProductCategory(productCategory)
-    if (idCategory === 1) {
-      setProductDataFiltered([...productData])
-    } else {
-      const newProductData = productData.filter(item => item.idCategory === idCategory)
-      setProductDataFiltered(newProductData)
-    }
-  }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await dispatch(getStaticDataThunk());
+    await dispatch(getCategoriesThunk());
+    setRefreshing(false);
+  };
 
   return (
     <>
@@ -47,9 +43,15 @@ const Home = ({ navigation }) => {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
         <View style={styles.carousel}>
-          <Carousel data={data} />
+          <Carousel data={banners} />
         </View>
 
         <View style={styles.preferentialProducts}>
@@ -59,16 +61,44 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
+        <View>
+          <FlatList
+            data={saleProducts.slice(0, 5)}
+            renderItem={({ item, index }) => {
+              const lastIndex = saleProducts.slice(0, 5).length - 1
+              return (
+                <View style={styles.containerItem(lastIndex, index)}>
+                  <Item
+                    item={item}
+                  />
+                </View>
+              )
+            }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+
+        <View style={styles.preferentialProducts}>
+          <Text style={styles.text}>Sản phẩm phổ biến</Text>
+          <TouchableOpacity>
+            <Text style={styles.textSeeAll}>Xem tất cả</Text>
+          </TouchableOpacity>
+        </View>
+
         <View >
           <FlatList
-            data={productData}
-            renderItem={({ item }) =>
-              <View style={styles.containerItem}>
-                <Item
-                  item={item}
-                />
-              </View>
-            }
+            data={popularProducts.slice(0, 5)}
+            renderItem={({ item, index }) => {
+              const lastIndex = popularProducts.slice(0, 5).length - 1
+              return (
+                <View style={styles.containerItem(lastIndex, index)}>
+                  <Item
+                    item={item}
+                  />
+                </View>
+              )
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
           />
@@ -84,21 +114,16 @@ const Home = ({ navigation }) => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-        // style={{ marginHorizontal: 15 }}
         >
-          {productCategory.filter(item => item.id !== 1).map((item, index) => {
-            const newProductCategory = productCategory.filter(item => item.id !== 1)
-            const lastIndex = newProductCategory.length - 1
-            console.log('lastIndex', lastIndex);
-            console.log('index', index);
-            console.log('item', item);
+          {categoriesList.filter(item => item.id !== -1).map((item, index) => {
+            const lastIndex = categoriesList.filter(item => item.id !== -1).length - 1
             return (
               <TouchableOpacity
-                style={styles.itemCategory(lastIndex, index)}
+                style={[styles.itemCategory(lastIndex, index)]}
                 key={item.id}
               >
                 <Image
-                  source={item.image} style={styles.imageCategory}
+                  source={{ uri: item.image }} style={styles.imageCategory}
                 />
                 <Text style={styles.categoryName}>{item.categoryName}</Text>
               </TouchableOpacity>
@@ -106,52 +131,10 @@ const Home = ({ navigation }) => {
           })}
         </ScrollView>
 
-        <View style={styles.preferentialProducts}>
-          <Text style={styles.text}>Sản phẩm theo danh mục</Text>
-          <TouchableOpacity>
-            <Text style={styles.textSeeAll}>Xem tất cả</Text>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {newProductCategory.map((item, index) => {
-            const lastIndex = newProductCategory.length - 1
-            return (
-              <TouchableOpacity
-                onPress={() => filterWithCategory(item.id)}
-                style={[styles.productWithCategory(lastIndex, index), { backgroundColor: item.isSelectCategory ? '#489969' : null }]}
-                key={item.id}
-              >
-                <Text style={{ color: item.isSelectCategory ? 'white' : 'black', fontWeight: 500 }}>{item.categoryName}</Text>
-              </TouchableOpacity>
-            )
-          })}
-        </ScrollView>
-
-        <View style={styles.itemWithCategory}>
-          <FlatList
-            data={productDataFiltered}
-            renderItem={({ item, index }) => {
-              const lastIndex = productDataFiltered.length - 1
-              return (
-                <View style={styles.containerItem(lastIndex, index)}>
-                  <Item
-                    item={item}
-                  />
-                </View>
-              )
-            }
-            }
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
-      </ScrollView>
+        <ProductsByCategory />
+      </ScrollView >
     </>
   )
 }
 
-export default Home
+export default Home;

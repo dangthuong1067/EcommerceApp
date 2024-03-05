@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack'
-import { createDrawerNavigator } from '@react-navigation/drawer'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { View, Text } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import Tab from './src/components/tab/tab.component';
 import Home from './src/screens/home/home.component';
 import Cart from './src/screens/cart/cart.component';
@@ -14,18 +15,17 @@ import Chat from './src/screens/chat/chat.component';
 import Login from './src/screens/login/login.component';
 import Register from './src/screens/register/register.component';
 import ForgotPassword from './src/screens/forgot-password/forgot-password.component';
-import { Provider } from 'react-redux';
 import store from './src/redux/store';
+import SplashScreen from './src/screens/splash-screen/splashScreen.component';
 
-const Stack = createStackNavigator()
-const DrawerStack = createDrawerNavigator()
-const BottomTab = createBottomTabNavigator()
+const Stack = createStackNavigator();
+const DrawerStack = createDrawerNavigator();
+const BottomTab = createBottomTabNavigator();
 
 function AppDrawerStack() {
   return (
     <DrawerStack.Navigator
       screenOptions={{ headerShown: false, swipeEnabled: false }}
-
       drawerContent={props => <DrawerView {...props} />}>
       <DrawerStack.Screen name='AppBottomStack' component={AppBottomStack} />
     </DrawerStack.Navigator>
@@ -83,8 +83,8 @@ function AppBottomStack() {
 
 const AuthStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name='Register' component={Register} />
     <Stack.Screen name='Login' component={Login} />
+    <Stack.Screen name='Register' component={Register} />
     <Stack.Screen name='ForgotPassword' component={ForgotPassword} />
   </Stack.Navigator>
 )
@@ -98,36 +98,35 @@ const ProtectedStack = () => (
 )
 
 const Navigation = () => {
+  const test = null
+  const { stack } = useSelector(state => state.app);
+  let rendering = null;
+
+  switch (stack) {
+    case 'init':
+      rendering = <SplashScreen />
+      break;
+    case 'auth':
+      rendering = <AuthStack />
+      break;
+    case 'protected':
+      rendering = <ProtectedStack />
+      break;
+    default:
+      rendering = null;
+      break;
+  }
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{ headerShown: false }}
-    //   >
-    //     <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
-
-
     <NavigationContainer>
-      {/* <ProtectedStack /> */}
-
-      <AuthStack />
+      {rendering}
     </NavigationContainer>
-  )
-}
+  );
+};
 
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{ headerShown: false }}
-    //   >
-    //     <Stack.Screen name="AppDrawerStack" component={AppDrawerStack} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
     <Provider store={store}>
       <Navigation />
     </Provider>
-
   )
 }
