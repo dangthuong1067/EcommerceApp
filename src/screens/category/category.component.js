@@ -11,7 +11,6 @@ const Category = () => {
       <FlatList
         data={categoriesList}
         keyExtractor={(item) => item.id}
-        key={1}
         horizontal={false}
         numColumns={2}
         renderItem={({ item }) =>

@@ -11,7 +11,12 @@ const store = configureStore({
     home: homeReducer,
     staticData: staticSlice,
     app: appReducer
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
 })
 
 export default store
